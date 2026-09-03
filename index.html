@@ -86,12 +86,14 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
 .field.full { grid-column: 1 / -1; }
 .field span, .select-label { color: #34383b; font-size: .86rem; font-weight: 700; }
 .field em { color: var(--muted); font-size: .78rem; font-style: normal; font-weight: 400; }
-.field input, .field select, .organize-row select {
+.field input, .field select, .organize-row select, .organize-row input {
   width: 100%; min-height: 43px; padding: 8px 10px; border: 1px solid #777d82; border-radius: 4px; background: var(--white);
 }
 .category-field { margin: 3px 0; padding: 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--white); }
 .category-field > span { font-size: .93rem; }
 .category-field small { color: var(--muted); font-size: .8rem; }
+.custom-category-field { padding: 12px; border-left: 5px solid #777d82; background: var(--white); }
+.custom-category-field small { color: var(--muted); font-size: .8rem; }
 .disabled-field { opacity: .48; }
 .current-check { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .9rem; font-weight: 700; }
 .current-check input { width: 18px; height: 18px; accent-color: var(--ink); }
@@ -151,6 +153,8 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
 .organize-context { color: var(--muted); font-size: .82rem; }
 .priority-tag { display: inline-block; margin-top: 3px; color: var(--green); font-size: .74rem; font-weight: 700; }
 .organize-row label { display: grid; gap: 4px; }
+.organize-category { display: grid; gap: 8px; }
+.custom-organize-label { padding: 9px; border-left: 4px solid #777d82; background: var(--soft); }
 .section-move-buttons { display: flex; gap: 5px; }
 .order-button { width: 39px; height: 39px; border: 1px solid #8f9498; border-radius: 4px; background: var(--white); font-weight: 700; }
 .order-button:hover:not(:disabled) { border-color: var(--ink); background: #e2e3e4; }
@@ -235,7 +239,7 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
       <div class="section-heading">
         <p class="kicker">Step 1 of 3</p>
         <h2 id="step-1-title" tabindex="-1">Add your experiences</h2>
-        <p>Add 2–8 specific roles, projects, or activities. Paid work is only one option.</p>
+        <p>Add at least 2 specific roles, projects, or activities. Paid work is only one option.</p>
       </div>
 
       <details class="idea-box">
@@ -260,7 +264,7 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
             <p class="kicker" id="entry-mode">New experience</p>
             <h3>Use the name you would put on a resume</h3>
           </div>
-          <span class="entry-count" id="experience-count">0 of 8 added</span>
+          <span class="entry-count" id="experience-count">0 added</span>
         </div>
         <p class="entry-example"><strong>Be specific:</strong> “Food Pantry Volunteer — CommUnity Food Bank” is more useful than “Volunteering.”</p>
         <div class="form-grid">
@@ -284,8 +288,14 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
               <option value="Research">Research</option>
               <option value="Teaching / Clinical / Field Experience">Teaching / Clinical / Field Experience</option>
               <option value="Additional Experience">Additional Experience</option>
+              <option value="__custom__">Create my own section…</option>
             </select>
             <small>Choose the section name that best helps an employer understand this experience.</small>
+          </label>
+          <label class="field full custom-category-field" id="custom-category-field" hidden>
+            <span>Name your resume section</span>
+            <input id="custom-category" name="customCategory" type="text" maxlength="60" placeholder="Public Health Experience">
+            <small>Use a short, descriptive heading that groups similar experiences.</small>
           </label>
           <label class="field">
             <span>Start date</span>
@@ -356,8 +366,8 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
 (() => {
   'use strict';
 
-  const MAX_EXPERIENCES = 8;
   const MIN_EXPERIENCES = 2;
+  const CUSTOM_SECTION = '__custom__';
   const SECTIONS = [
     'Relevant Experience',
     'Work Experience',
@@ -374,6 +384,8 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
   const titleInput = document.querySelector('#experience-title');
   const contextInput = document.querySelector('#experience-context');
   const categoryInput = document.querySelector('#experience-category');
+  const customCategoryField = document.querySelector('#custom-category-field');
+  const customCategoryInput = document.querySelector('#custom-category');
   const startInput = document.querySelector('#experience-start');
   const endInput = document.querySelector('#experience-end');
   const currentInput = document.querySelector('#experience-current');
@@ -432,6 +444,8 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
     endInput.disabled = false;
     endInput.required = true;
     endField.classList.remove('disabled-field');
+    customCategoryField.hidden = true;
+    customCategoryInput.required = false;
     document.querySelector('#entry-mode').textContent = 'New experience';
     addButton.textContent = 'Add experience';
     cancelEditButton.hidden = true;
@@ -441,7 +455,9 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
   function validateEntry() {
     const title = titleInput.value.trim().replace(/\s+/g, ' ');
     const context = contextInput.value.trim().replace(/\s+/g, ' ');
-    const section = categoryInput.value;
+    const section = categoryInput.value === CUSTOM_SECTION
+      ? customCategoryInput.value.trim().replace(/\s+/g, ' ')
+      : categoryInput.value;
     if (!title || !context || !section) {
       return { error: 'Complete the experience name, context, and experience category.' };
     }
@@ -469,14 +485,11 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
 
   function updateStepOne() {
     const count = state.experiences.length;
-    countText.textContent = `${count} of ${MAX_EXPERIENCES} added`;
+    countText.textContent = `${count} experience${count === 1 ? '' : 's'} added`;
     makeCardsButton.disabled = count < MIN_EXPERIENCES;
-    addButton.disabled = count >= MAX_EXPERIENCES && state.editingId === null;
     inputHint.textContent = count < MIN_EXPERIENCES
       ? `Add ${MIN_EXPERIENCES - count} more to continue.`
-      : count === MAX_EXPERIENCES
-        ? 'You have added the maximum of 8 experiences.'
-        : 'Ready to organize—or add another experience.';
+      : 'Ready to organize—or add another experience.';
 
     addedList.replaceChildren();
     [...state.experiences].sort((a, b) => endValue(b) - endValue(a)).forEach(item => {
@@ -517,7 +530,11 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
     state.editingId = id;
     titleInput.value = item.title;
     contextInput.value = item.context;
-    categoryInput.value = item.section;
+    const isStandardSection = SECTIONS.includes(item.section);
+    categoryInput.value = isStandardSection ? item.section : CUSTOM_SECTION;
+    customCategoryField.hidden = isStandardSection;
+    customCategoryInput.required = !isStandardSection;
+    customCategoryInput.value = isStandardSection ? '' : item.section;
     startInput.value = item.start;
     endInput.value = item.end;
     currentInput.checked = item.current;
@@ -593,10 +610,16 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
             <div class="organize-name"></div>
             <div class="organize-context"></div>
           </div>
-          <label>
-            <span class="select-label">Experience category</span>
-            <select></select>
-          </label>`;
+          <div class="organize-category">
+            <label>
+              <span class="select-label">Experience category</span>
+              <select></select>
+            </label>
+            <label class="custom-organize-label" hidden>
+              <span class="select-label">Custom section name</span>
+              <input class="custom-organize-input" type="text" maxlength="60">
+            </label>
+          </div>`;
         row.querySelector('.organize-name').textContent = item.title;
         row.querySelector('.organize-context').textContent = `${item.context} · ${dateLabel(item)}`;
         const select = row.querySelector('select');
@@ -607,10 +630,32 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
           option.selected = optionSection === item.section;
           select.append(option);
         });
+        const customOption = document.createElement('option');
+        customOption.value = CUSTOM_SECTION;
+        customOption.textContent = 'Create my own section…';
+        customOption.selected = !SECTIONS.includes(item.section);
+        select.append(customOption);
+        const customLabel = row.querySelector('.custom-organize-label');
+        const customInput = row.querySelector('.custom-organize-input');
+        customLabel.hidden = SECTIONS.includes(item.section);
+        customInput.value = SECTIONS.includes(item.section) ? '' : item.section;
         select.setAttribute('aria-label', `Experience category for ${item.title}`);
         select.addEventListener('change', () => {
-          item.section = select.value;
+          if (select.value === CUSTOM_SECTION) {
+            customLabel.hidden = false;
+            customInput.required = true;
+            customInput.focus();
+          } else {
+            item.section = select.value;
+            renderOrganize();
+          }
+        });
+        customInput.addEventListener('change', () => {
+          const customName = customInput.value.trim().replace(/\s+/g, ' ');
+          if (!customName) return;
+          item.section = customName;
           renderOrganize();
+          announce(`${item.title} moved to ${customName}.`);
         });
         organizeList.append(row);
       });
@@ -793,6 +838,14 @@ h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; l
     endInput.required = !currentInput.checked;
     if (currentInput.checked) endInput.value = '';
     endField.classList.toggle('disabled-field', currentInput.checked);
+  });
+
+  categoryInput.addEventListener('change', () => {
+    const isCustom = categoryInput.value === CUSTOM_SECTION;
+    customCategoryField.hidden = !isCustom;
+    customCategoryInput.required = isCustom;
+    if (isCustom) customCategoryInput.focus();
+    else customCategoryInput.value = '';
   });
 
   cancelEditButton.addEventListener('click', resetForm);
