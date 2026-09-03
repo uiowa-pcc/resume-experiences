@@ -1,38 +1,840 @@
+
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A visual resume formatting check for University of Iowa students."><title>Resume Format Checker</title>
-<style>
-:root{--y:#ffcd00;--ink:#151515;--muted:#59626b;--line:#d5d7da;--soft:#f1f2f3;--green:#176b48;--red:#9b3030}*{box-sizing:border-box}body{margin:0;color:var(--ink);font:16px/1.5 Arial,Helvetica,sans-serif}.app{max-width:1180px;margin:auto;padding:30px 20px 52px}.eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 7px;font-size:.85rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}.eyebrow:before{content:"";width:28px;height:6px;background:var(--y)}h1{margin:0;font-size:clamp(2rem,5vw,3rem);line-height:1.05;letter-spacing:-.03em}.intro{max-width:780px;margin:11px 0 23px;color:var(--muted);font-size:1.05rem}.progress-wrap{display:flex;align-items:center;gap:12px;margin-bottom:20px}.progress{flex:1;max-width:520px;height:10px;background:#e5e7e9;border-radius:10px;overflow:hidden}.progress span{display:block;width:0;height:100%;background:var(--green);transition:.2s}.progress-text{font-size:.9rem;font-weight:700}.workspace{display:grid;grid-template-columns:minmax(430px,1.16fr) minmax(340px,.84fr);gap:24px;align-items:start}.resume-wrap{position:relative;padding:26px;background:#e8eaec;border-radius:7px}.resume{max-width:610px;min-height:770px;margin:auto;padding:46px 49px;background:#fff;box-shadow:0 5px 20px #0003;font-size:11px;line-height:1.3}.resume [data-part]{border:2px solid transparent;border-radius:2px}.resume[data-show=header] [data-part=header],.resume[data-show=education] [data-part=education],.resume[data-show=experience] [data-part=experience],.resume[data-show=dates] [data-part=dates],.resume[data-show=bullets] [data-part=bullets],.resume[data-show=headings] [data-part=headings],.resume[data-show=spacing] [data-part=spacing],.resume[data-show=layout] [data-part=layout],.resume[data-show=final] [data-part=final]{outline:4px solid #ffcd00c4;outline-offset:4px;background:#ffcd0029}.r-name{text-align:center;font-size:22px;font-weight:700}.r-contact{text-align:center;margin:4px 0 19px}.r-heading{margin:13px 0 6px;padding-bottom:2px;border-bottom:1.5px solid #111;font-size:12px;font-weight:800;letter-spacing:.07em}.row{display:grid;grid-template-columns:1fr auto;gap:12px}.bold{font-weight:700}.right{text-align:right}.resume ul{margin:4px 0 8px;padding-left:17px}.resume li{margin:2px 0}.sample-note{margin:12px 0 0;color:var(--muted);font-size:.87rem;text-align:center}.panel{position:sticky;top:16px;border:1px solid #c9ccd0;border-top:8px solid var(--y);border-radius:6px;padding:20px;box-shadow:0 10px 28px #00000012}.panel h2{margin:0 0 3px;font-size:1.4rem}.panel-help{margin:0 0 14px;color:var(--muted);font-size:.92rem}.callouts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.callout{min-height:45px;padding:8px 10px;border:2px solid var(--line);border-radius:5px;background:#fff;text-align:left;font:700 .91rem Arial;cursor:pointer}.callout .num{display:inline-grid;place-items:center;width:23px;height:23px;margin-right:6px;border-radius:50%;background:var(--y)}.callout:hover,.callout.active{border-color:#111;background:var(--soft)}.callout.yes:after{content:" ✓";color:var(--green)}.callout.no:after{content:" • Fix";color:var(--red);font-size:.78rem}.question{margin-top:15px;padding:16px;background:#f5f6f7;border-left:5px solid var(--y)}.question-label{margin:0 0 4px;color:var(--muted);font-size:.82rem;font-weight:700;text-transform:uppercase}.question h3{margin:0;font-size:1.12rem;line-height:1.35}.tip{margin:7px 0 13px;color:var(--muted);font-size:.9rem}.answers{display:flex;gap:9px}.answer,.utility{min-height:42px;padding:9px 15px;border:2px solid #111;border-radius:4px;background:#fff;font:700 .95rem Arial;cursor:pointer}.answer.primary{background:var(--y)}button:focus-visible,a:focus-visible{outline:3px solid #92bee6;outline-offset:2px}.fixes{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.fix-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.fixes h3{margin:0;font-size:1.1rem}.fix-count{padding:3px 8px;border-radius:20px;background:var(--soft);font-size:.8rem;font-weight:700}.fix-list{display:grid;gap:8px;margin:10px 0 0;padding:0;list-style:none}.fix-list li{position:relative;padding-left:24px;font-size:.92rem}.fix-list li:before{content:"→";position:absolute;left:1px;font-weight:800}.empty{margin:9px 0 0;color:var(--muted);font-size:.92rem}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.utility{font-size:.86rem}.utility.copy{background:var(--y)}.status{min-height:21px;margin:7px 0 0;color:var(--green);font-size:.85rem;font-weight:700}.resource{text-align:center;margin:22px 0 0}.resource a{color:#164f86;font-weight:700}@media(max-width:850px){.workspace{grid-template-columns:1fr}.panel{position:static}.resume-wrap{padding:14px}.resume{min-height:660px;padding:35px 30px;font-size:9px}.r-name{font-size:18px}.r-heading{font-size:10px}}@media(max-width:480px){.app{padding:24px 13px 40px}.callouts{grid-template-columns:1fr}.resume{min-height:590px;padding:28px 20px;font-size:8px}.answers>*{flex:1}}@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-</style><style>
-.callouts{grid-template-columns:1fr;gap:8px}.accordion-item{width:100%}.callout{display:flex;align-items:center;width:100%}.callout .chevron{margin-left:auto;font-size:1.25rem;line-height:1;transform:rotate(-90deg)}.callout.active .chevron{transform:rotate(0)}.inline-question{margin:0;border:2px solid #111;border-top:0;border-left:5px solid var(--y);border-radius:0 0 5px 5px}.callout.active{border-radius:5px 5px 0 0}.answer[aria-pressed=true]{box-shadow:inset 0 0 0 3px #fff,0 0 0 2px #111}.callout.yes:after{content:"✓ Complete";margin-left:8px;color:var(--green);font-size:.78rem}.callout.no:after{content:"• On fix list";margin-left:8px;color:var(--red);font-size:.78rem}.r-contact{margin:4px 0 0}.contact-line{margin:1px 0 19px;white-space:nowrap}.email{white-space:nowrap}
-.resume[data-show=skills] [data-part=skills]{outline:4px solid #ffcd00c4;outline-offset:4px;background:#ffcd0029}
-</style></head><body><main class="app">
-<h1>Check Your Resume Format</h1><p class="intro">Select each numbered part of the sample, then compare it with your resume. Answering “No” adds a quick recommendation to your fix list.</p>
-<div class="progress-wrap"><div class="progress" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span id="bar"></span></div><span class="progress-text" id="progressText">0 of 10 answered</span></div>
-<div class="workspace">
-<div class="resume-wrap"><article class="resume" id="sampleResume" data-show="header" aria-label="Correctly formatted sample resume">
-<div data-part="layout"><div data-part="header"><div class="r-name">JORDAN HAWK</div><div class="r-contact">2357 N. Franklin Street, Iowa City, IA 52242</div><div class="r-contact contact-line">319-555-0142 · <span class="email">jordan-hawk@uiowa.edu</span></div></div>
-<section data-part="education"><div class="r-heading" data-part="headings">EDUCATION</div><div class="row" data-part="dates"><span class="bold">The University of Iowa, Iowa City, IA</span><span class="right">May 20XX</span></div><div>B.A. Ethics &amp; Public Policy</div><div>GPA: 3.62/4.00</div></section>
-<section data-part="experience"><div class="r-heading" data-part="headings">WORK EXPERIENCE</div><div data-part="spacing"><div class="row"><span class="bold">Front Desk Assistant</span><span class="right" data-part="dates">August 20XX–Present</span></div><div>Pomerantz Career Center, The University of Iowa, Iowa City, IA</div><ul data-part="bullets"><li>Greet students, faculty, staff, and employers visiting the Career Center</li><li>Assist 50+ students weekly with scheduling advising appointments</li></ul></div><div data-part="spacing"><div class="row"><span class="bold">Sales Associate</span><span class="right" data-part="dates">Summers 20XX–20XX</span></div><div>Afterthoughts Jewelry, Des Moines, IA</div><ul data-part="bullets"><li>Greet customers and help locate items</li><li>Organize shelves and restock merchandise</li></ul></div></section>
-<section data-part="final"><div class="r-heading" data-part="headings">VOLUNTEER EXPERIENCE</div><div data-part="spacing"><div class="row"><span class="bold">Education &amp; Outreach Volunteer</span><span class="right" data-part="dates">January 20XX–Present</span></div><div>Old Capitol Museum, The University of Iowa, Iowa City, IA</div><ul data-part="bullets"><li>Provide weekly tours for school groups visiting the museum</li><li>Assist with monthly outreach events for families and children</li></ul></div><div data-part="skills"><div class="r-heading" data-part="headings">SKILLS</div><div><span class="bold">Technical Skills:</span> Python, SQL, Java</div><div><span class="bold">Language:</span> Spanish (conversational)</div></div></section></div></article><p class="sample-note">Experiences are adapted and shortened from University of Iowa resume samples.</p></div>
-<aside class="panel" aria-labelledby="panelTitle"><h2 id="panelTitle">Explore the example</h2><p class="panel-help">Choose a section. Its question will open directly below it.</p><div class="callouts" id="callouts"></div>
-<section class="fixes"><div class="fix-head"><h3>My formatting fix list</h3><span class="fix-count" id="fixCount">0 items</span></div><p class="panel-help">When you’re finished, copy and paste this list into your own document. Use it with the Pomerantz Career Center resume samples and resources below as you make changes.</p><div id="fixContent"><p class="empty">Nothing added yet. Your “No” answers will appear here.</p></div><div class="actions"><button class="utility copy" id="copyBtn" type="button">Copy my fix list</button><button class="utility" id="resetBtn" type="button">Start over</button></div><p class="status" id="status" role="status"></p></section></aside></div>
-<p class="resource"><a href="https://careers.uiowa.edu/resumes" target="_blank" rel="noopener">View Pomerantz Career Center resume samples and resources →</a></p>
-</main><script>
-const checks=[
-{part:'header',name:'Header',q:'Is your name prominent, with your location (address or city/state), phone, professional email, and optional LinkedIn URL grouped together?',tip:'Keep your contact details together so they are easy to find.',fix:'Group your name and contact information at the top. Include your location (address or city/state), phone, professional email, and an optional LinkedIn URL.'},
-{part:'education',name:'Education',q:'Does your education section include your institution, location, degree, and anticipated graduation date?',tip:'You may also include a GPA above 3.0 and relevant minors, certificates, or awards.',fix:'Complete your education entry with the institution, location, degree, and anticipated graduation date.'},
-{part:'experience',name:'Experience entries',q:'Does each experience include the organization, location, position title, and start/end dates?',tip:'Include jobs, internships, campus involvement, volunteer work, projects, and other relevant experience.',fix:'For each experience, include the organization, location, position title, and start/end dates.'},
-{part:'dates',name:'Dates',q:'Are your dates right-aligned and written in a consistent format?',tip:'Consistent date placement creates an easy-to-scan visual pattern.',fix:'Right-align dates and use the same date format throughout your resume.'},
-{part:'bullets',name:'Bullet points',q:'Are your bullet points aligned and easier to scan than paragraphs?',tip:'Most experiences use 2–5 concise bullets beginning with power verbs.',fix:'Use consistently aligned bullet points instead of dense paragraphs.'},
-{part:'headings',name:'Section headings',q:'Are your section headings clear, descriptive, and formatted consistently?',tip:'Standard headings such as Education and Experience also work well with applicant tracking systems.',fix:'Use clear section headings and format every heading the same way.'},
-{part:'spacing',name:'Spacing & styles',q:'Is the spacing, bolding, capitalization, and overall style consistent?',tip:'Repeat the same formatting choices to create a clear hierarchy.',fix:'Make spacing, bolding, capitalization, and text styles consistent.'},
-{part:'layout',name:'Page layout',q:'Does your resume use a readable 10–12 point font, .5–1 inch margins, and a simple one-column layout?',tip:'Aim for one page with effective use of space unless your field or experience calls for more.',fix:'Use a readable 10–12 point font, .5–1 inch margins, and a simple one-column layout.'},
-{part:'skills',name:'Skills',q:'If you include a Skills section, does it list only technical/computer skills and languages?',tip:'Do not list soft skills or everyday software such as Google Workspace. Show those abilities through your experience bullets instead.',fix:'Limit the Skills section to technical/computer skills and languages.'},
-{part:'final',name:'Final check',q:'Have you proofread your resume and saved it as a PDF with your name in the file name?',tip:'Correct spelling and grammar—and a professional file name—help create a polished final impression.',fix:'Proofread carefully, save as a PDF, and include your name in the file name.'}
-];let active=0;const answers=Array(checks.length).fill(null),callouts=document.querySelector('#callouts');
-function drawAccordion(){callouts.innerHTML=checks.map((c,i)=>`<div class="accordion-item"><button class="callout${i===active?' active':''}${answers[i]?' '+answers[i]:''}" type="button" data-i="${i}" aria-expanded="${i===active}" aria-controls="question-${i}"><span class="num">${i+1}</span>${c.name}<span class="chevron" aria-hidden="true">⌄</span></button>${i===active?`<section class="question inline-question" id="question-${i}"><h3>${c.q}</h3><p class="tip">${c.tip}</p><div class="answers"><button class="answer primary" type="button" data-answer="yes" aria-pressed="${answers[i]==='yes'}">Yes</button><button class="answer" type="button" data-answer="no" aria-pressed="${answers[i]==='no'}">No—add to fix list</button></div></section>`:''}</div>`).join('')}
-function select(i){active=i;sampleResume.dataset.show=checks[i].part;drawAccordion()}
-function render(){const answered=answers.filter(Boolean).length,fixes=checks.filter((_,i)=>answers[i]==='no');bar.style.width=`${Math.round(answered/checks.length*100)}%`;document.querySelector('.progress').setAttribute('aria-valuenow',answered);progressText.textContent=`${answered} of ${checks.length} answered`;fixCount.textContent=`${fixes.length} item${fixes.length===1?'':'s'}`;fixContent.innerHTML=fixes.length?`<ul class="fix-list">${fixes.map(c=>`<li>${c.fix}</li>`).join('')}</ul>`:'<p class="empty">Nothing added yet. Your “No” answers will appear here.</p>';drawAccordion();status.textContent=''}
-function answer(value){answers[active]=value;const next=answers.findIndex((a,i)=>!a&&i>active);if(next>-1)active=next;render();sampleResume.dataset.show=checks[active].part}
-callouts.onclick=e=>{const answerButton=e.target.closest('[data-answer]');if(answerButton){answer(answerButton.dataset.answer);return}const b=e.target.closest('.callout');if(b)select(Number(b.dataset.i))};resetBtn.onclick=()=>{answers.fill(null);active=0;sampleResume.dataset.show=checks[0].part;render();document.querySelector('.callout').focus()};copyBtn.onclick=async()=>{const fixes=checks.filter((_,i)=>answers[i]==='no');const text=fixes.length?'MY RESUME FORMATTING FIX LIST\n\n'+fixes.map(c=>'☐ '+c.fix).join('\n'):'My resume formatting check did not identify any fixes.';try{await navigator.clipboard.writeText(text);status.textContent='Fix list copied!'}catch{status.textContent='Copy was blocked. Select and copy the list above.'}};render();
-</script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Choose, categorize, and prioritize experiences for a tailored resume.">
+  <title>Resume Experience Sorter</title>
+  <style>
+:root {
+  --yellow: #ffcd00;
+  --ink: #151515;
+  --muted: #59626b;
+  --line: #d5d7da;
+  --soft: #f3f4f5;
+  --green: #176b48;
+  --green-soft: #edf7f2;
+  --red: #9b3030;
+  --white: #fff;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+html { scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: var(--white); font: 16px/1.5 Arial, Helvetica, sans-serif; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .48; }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 3px solid #92bee6; outline-offset: 2px;
+}
+.skip-link {
+  position: fixed; top: 8px; left: 8px; z-index: 100; transform: translateY(-150%);
+  padding: 9px 13px; border: 2px solid var(--ink); background: var(--white); color: var(--ink);
+}
+.skip-link:focus { transform: none; }
+.shell { max-width: 1180px; margin: auto; padding: 30px 20px 54px; }
+.hero { padding: 0 0 22px; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: 9px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; letter-spacing: -.03em; }
+.lede { max-width: 780px; margin-bottom: 12px; color: var(--muted); font-size: 1.05rem; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .86rem; }
+
+.stepper { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.step-line { display: none; }
+.step {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 39px; padding: 7px 13px;
+  border: 2px solid var(--line); border-radius: 5px; background: var(--white); color: var(--muted); font-weight: 700;
+}
+.step span {
+  display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--soft); color: var(--ink); font-size: .8rem;
+}
+.step.active { border-color: var(--ink); background: #e2e3e4; color: var(--ink); }
+.step.active span { background: var(--ink); color: var(--white); }
+.step.complete { border-color: #8f9498; background: #e2e3e4; color: var(--ink); }
+.step.complete span { background: #666b70; color: var(--white); }
+
+.panel { border: 1px solid #c9ccd0; border-top: 8px solid var(--yellow); border-radius: 6px; padding: clamp(20px, 4vw, 34px); }
+.section-heading { max-width: 800px; margin-bottom: 22px; }
+.section-heading h2, .result-heading h2 { margin-bottom: 5px; font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.18; }
+.section-heading p:last-child { margin-bottom: 0; color: var(--muted); }
+.kicker { margin-bottom: 5px; color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.split-heading { max-width: none; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+
+.idea-box { margin-bottom: 18px; border: 1px solid var(--line); border-radius: 5px; background: var(--white); }
+.idea-box summary { padding: 12px 14px; font-weight: 700; cursor: pointer; }
+.idea-grid { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 14px 10px; }
+.idea-chip {
+  padding: 7px 10px; border: 1px solid #aeb2b5; border-radius: 4px; background: var(--white); font-size: .86rem; font-weight: 700;
+}
+.idea-chip:hover { border-color: var(--ink); background: var(--soft); }
+.idea-chip.selected { border-color: var(--ink); background: #e2e3e4; color: var(--ink); }
+.idea-prompt { margin: 0 14px 14px; padding: 11px 13px; border-left: 5px solid var(--yellow); background: var(--soft); color: var(--muted); font-size: .9rem; }
+
+.entry-card { margin-bottom: 16px; padding: 19px; border: 1px solid var(--line); border-left: 6px solid var(--yellow); border-radius: 5px; background: var(--soft); }
+.entry-card-heading { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; }
+.entry-card-heading h3 { margin-bottom: 5px; font-size: 1.15rem; }
+.entry-count { white-space: nowrap; padding: 3px 8px; border-radius: 20px; background: var(--white); font-size: .8rem; font-weight: 700; }
+.entry-example { margin-bottom: 15px; color: var(--muted); font-size: .9rem; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.field { display: grid; gap: 5px; }
+.field.full { grid-column: 1 / -1; }
+.field span, .select-label { color: #34383b; font-size: .86rem; font-weight: 700; }
+.field em { color: var(--muted); font-size: .78rem; font-style: normal; font-weight: 400; }
+.field input, .field select, .organize-row select {
+  width: 100%; min-height: 43px; padding: 8px 10px; border: 1px solid #777d82; border-radius: 4px; background: var(--white);
+}
+.category-field { margin: 3px 0; padding: 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--white); }
+.category-field > span { font-size: .93rem; }
+.category-field small { color: var(--muted); font-size: .8rem; }
+.disabled-field { opacity: .48; }
+.current-check { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .9rem; font-weight: 700; }
+.current-check input { width: 18px; height: 18px; accent-color: var(--ink); }
+.date-help { margin: 7px 0 0; color: var(--muted); font-size: .82rem; }
+.form-error { min-height: 22px; margin: 7px 0 0; color: var(--red); font-size: .86rem; font-weight: 700; }
+.entry-actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+.added-list { display: grid; gap: 8px; }
+.added-card { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 5px; }
+.added-card h3 { margin-bottom: 1px; font-size: 1rem; }
+.added-context, .added-date { margin-bottom: 0; color: var(--muted); font-size: .86rem; }
+.added-date { font-weight: 700; }
+.added-category { display: inline-block; margin-top: 5px; padding: 3px 7px; border-radius: 3px; background: #e2e3e4; font-size: .76rem; font-weight: 700; }
+.added-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.mini-button { min-height: 36px; padding: 6px 9px; border: 1px solid #8f9498; border-radius: 4px; background: var(--white); font-size: .82rem; font-weight: 700; }
+.mini-button:hover { border-color: var(--ink); background: var(--soft); }
+.remove-button { color: var(--red); }
+.input-hint { margin: 10px 0 0; color: var(--muted); font-size: .87rem; }
+
+.actions { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
+.actions.end { justify-content: flex-end; }
+.actions.spread { justify-content: space-between; }
+.primary, .secondary, .text-button { min-height: 42px; border-radius: 4px; font-weight: 700; }
+.primary, .secondary { padding: 9px 15px; border: 2px solid var(--ink); }
+.primary { background: #e2e3e4; color: var(--ink); }
+.secondary { background: var(--white); color: var(--ink); }
+.primary:hover:not(:disabled), .secondary:hover:not(:disabled) { background: #d3d5d6; }
+.text-button { padding: 6px 3px; border: 0; background: transparent; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.text-button.danger { color: var(--red); }
+
+.decision-guide, .tip-box { margin-bottom: 18px; padding: 13px 14px; border-left: 5px solid var(--yellow); background: var(--soft); }
+.sort-board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; align-items: stretch; }
+.sort-column { min-height: 300px; padding: 12px; border: 2px solid var(--line); border-radius: 5px; background: var(--soft); transition: .15s; }
+.sort-column.drag-over { border-color: var(--ink); background: #fff7d6; }
+.sort-column.feature { border-top: 7px solid var(--yellow); }
+.sort-column.include { border-top: 7px solid var(--green); }
+.sort-column.omit { border-top: 7px solid #777d82; }
+.column-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.column-heading h3 { margin-bottom: 0; font-size: 1rem; }
+.column-note { min-height: 38px; margin: 3px 0 8px; color: var(--muted); font-size: .77rem; }
+.count-pill { display: grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 20px; background: var(--white); font-size: .78rem; font-weight: 700; }
+.card-list { min-height: 205px; }
+.experience-card { margin-bottom: 9px; padding: 11px; border: 1px solid #b8bcc0; border-radius: 4px; background: var(--white); box-shadow: 0 2px 5px #0000000d; }
+.experience-card[draggable="true"] { cursor: grab; }
+.experience-card.dragging { opacity: .42; }
+.card-name { font-weight: 700; overflow-wrap: anywhere; }
+.card-context, .card-date { color: var(--muted); font-size: .77rem; }
+.card-date { margin: 2px 0 9px; font-weight: 700; }
+.card-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.choice-button { min-width: 0; padding: 6px 2px; border: 1px solid #9ba0a4; border-radius: 3px; background: var(--white); font-size: .69rem; font-weight: 700; }
+.choice-button:hover { border-color: var(--ink); background: var(--soft); color: var(--ink); }
+.choice-button.selected { border-color: var(--ink); background: #e2e3e4; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.status-note { margin: 0; color: var(--muted); font-size: .88rem; }
+
+.organize-list { display: grid; gap: 8px; margin-bottom: 28px; }
+.organize-row { display: grid; grid-template-columns: minmax(220px, 1.3fr) minmax(240px, 1fr); gap: 16px; align-items: center; padding: 13px 14px; border: 1px solid var(--line); border-radius: 5px; }
+.organize-name { font-weight: 700; }
+.organize-context { color: var(--muted); font-size: .82rem; }
+.priority-tag { display: inline-block; margin-top: 3px; color: var(--green); font-size: .74rem; font-weight: 700; }
+.organize-row label { display: grid; gap: 4px; }
+.section-move-buttons { display: flex; gap: 5px; }
+.order-button { width: 39px; height: 39px; border: 1px solid #8f9498; border-radius: 4px; background: var(--white); font-weight: 700; }
+.order-button:hover:not(:disabled) { border-color: var(--ink); background: #e2e3e4; }
+.section-order-box { margin: 0 0 28px; padding: 17px; border: 1px solid var(--line); border-left: 6px solid var(--yellow); border-radius: 5px; background: var(--soft); }
+.section-order-box h3 { margin-bottom: 3px; font-size: 1.08rem; }
+.section-order-box > p { margin-bottom: 12px; color: var(--muted); font-size: .88rem; }
+.section-order-list { display: grid; gap: 6px; }
+.section-order-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 9px 10px; border: 1px solid #b9bdc0; border-radius: 4px; background: var(--white); cursor: grab; }
+.section-order-row.dragging { opacity: .45; }
+.section-order-row.drag-over { border-color: var(--ink); background: #e2e3e4; }
+.drag-handle { color: var(--muted); font-weight: 700; letter-spacing: -3px; }
+
+.result-wrap { margin-top: 8px; padding: clamp(18px, 4vw, 30px); border-radius: 5px; background: #e8eaec; }
+.result-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+.result-heading h2 { margin-bottom: 16px; }
+.resume-paper { max-width: 760px; padding: clamp(24px, 5vw, 42px); background: var(--white); border: 1px solid #cfd2d4; box-shadow: 0 5px 20px #0002; font-size: .92rem; }
+.output-section { margin-bottom: 22px; }
+.output-section:last-child { margin-bottom: 0; }
+.output-section h3 { margin-bottom: 8px; padding-bottom: 3px; border-bottom: 2px solid var(--ink); font-size: .9rem; letter-spacing: .07em; text-transform: uppercase; }
+.output-entry { position: relative; margin-bottom: 11px; }
+.output-entry:last-child { margin-bottom: 0; }
+.output-entry-top { display: grid; grid-template-columns: 1fr auto; gap: 15px; }
+.output-date { text-align: right; }
+.output-context { color: #34383b; }
+.feature-marker { color: #775e00; font-size: .7rem; font-weight: 700; text-transform: uppercase; }
+.fine-print { margin: 12px 0 0; color: var(--muted); font-size: .8rem; }
+.toast { position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%); padding: 10px 15px; border-radius: 4px; background: var(--ink); color: var(--white); box-shadow: 0 8px 24px #0003; font-weight: 700; }
+
+@media (max-width: 900px) {
+  .sort-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .shell { padding: 20px 13px 40px; }
+  .meta-row, .split-heading, .result-heading, .actions.spread { align-items: stretch; flex-direction: column; }
+  .step { flex: 1; justify-content: center; padding: 6px; font-size: .78rem; }
+  .form-grid, .sort-board, .organize-row { grid-template-columns: 1fr; }
+  .sort-column { min-height: 180px; }
+  .card-list { min-height: 70px; }
+  .column-note { min-height: 0; }
+  .entry-card-heading, .added-card { align-items: stretch; flex-direction: column; }
+  .entry-count { align-self: flex-start; }
+  .added-actions { justify-content: flex-end; }
+  .primary, .secondary { width: 100%; }
+  .output-entry-top { grid-template-columns: 1fr; gap: 0; }
+  .output-date { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
+@media print {
+  body { background: var(--white); }
+  .hero, .stepper, #step-1, .section-heading, .tip-box, .organize-list, .section-order-box,
+  .result-heading .secondary, .fine-print, .no-print { display: none !important; }
+  .shell, .panel, .result-wrap, .resume-paper { width: 100%; max-width: none; margin: 0; padding: 0; border: 0; box-shadow: none; }
+  #step-2 { display: block !important; min-height: 0; }
+  .result-heading { display: block; }
+  .result-wrap { background: var(--white); }
+}
+
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to activity</a>
+  <main id="main" class="shell">
+    <header class="hero">
+      <h1>Resume Experience Sorter</h1>
+      <p class="lede">Decide what belongs on your resume, where it fits, and what an employer should notice first.</p>
+      <div class="meta-row" aria-label="Activity details">
+        <span><strong>Quick tool:</strong> About 5 minutes</span>
+        <span>Your entries stay in this browser.</span>
+      </div>
+    </header>
+
+    <nav class="stepper" aria-label="Activity progress">
+      <button class="step active" type="button" data-go="1" aria-current="step"><span>1</span> Add</button>
+      <span class="step-line" aria-hidden="true"></span>
+      <button class="step" type="button" data-go="2" disabled><span>2</span> Organize</button>
+    </nav>
+
+    <section class="panel" id="step-1" aria-labelledby="step-1-title">
+      <div class="section-heading">
+        <p class="kicker">Step 1 of 3</p>
+        <h2 id="step-1-title" tabindex="-1">Add your experiences</h2>
+        <p>Add 2–8 specific roles, projects, or activities. Paid work is only one option.</p>
+      </div>
+
+      <details class="idea-box">
+        <summary>Need ideas? Choose an area to get a specific prompt</summary>
+        <div class="idea-grid">
+          <button type="button" class="idea-chip" data-prompt="Think of a specific paid job or internship. What was your actual position title and employer?">Jobs &amp; internships</button>
+          <button type="button" class="idea-chip" data-prompt="Name a specific class project that let you apply skills—not simply the course name. What did you create, study, or solve?">Classes &amp; projects</button>
+          <button type="button" class="idea-chip" data-prompt="Think of one student organization, leadership role, or campus activity. What was your role or contribution?">Campus &amp; leadership</button>
+          <button type="button" class="idea-chip" data-prompt="Name a specific volunteer role and the organization or event where you contributed.">Volunteering</button>
+          <button type="button" class="idea-chip" data-prompt="Think of a specific caregiving, tutoring, coaching, or teaching responsibility. Who or what setting did it involve?">Caregiving &amp; teaching</button>
+          <button type="button" class="idea-chip" data-prompt="Name a specific research study, lab, or faculty project. What was your role?">Research &amp; labs</button>
+          <button type="button" class="idea-chip" data-prompt="Think of a team, club sport, performance group, or other activity. What role or responsibility did you hold?">Athletics &amp; activities</button>
+          <button type="button" class="idea-chip" data-prompt="Name a specific certification, training program, conference, or professional development experience.">Training &amp; certifications</button>
+          <button type="button" class="idea-chip" data-prompt="Name the specific creative, freelance, entrepreneurial, or independent project—not only the general type of work.">Creative &amp; independent work</button>
+        </div>
+        <p id="idea-prompt" class="idea-prompt" aria-live="polite">Choose an area above for a question that helps you name the experience.</p>
+      </details>
+
+      <form id="experience-form" class="entry-card">
+        <div class="entry-card-heading">
+          <div>
+            <p class="kicker" id="entry-mode">New experience</p>
+            <h3>Use the name you would put on a resume</h3>
+          </div>
+          <span class="entry-count" id="experience-count">0 of 8 added</span>
+        </div>
+        <p class="entry-example"><strong>Be specific:</strong> “Food Pantry Volunteer — CommUnity Food Bank” is more useful than “Volunteering.”</p>
+        <div class="form-grid">
+          <label class="field full">
+            <span>Role, project, or activity name</span>
+            <input id="experience-title" name="title" type="text" maxlength="90" placeholder="Food Pantry Volunteer" required>
+          </label>
+          <label class="field full">
+            <span>Organization, course, or setting</span>
+            <input id="experience-context" name="context" type="text" maxlength="100" placeholder="CommUnity Food Bank" required>
+          </label>
+          <label class="field full category-field">
+            <span>Experience category <strong>(required)</strong></span>
+            <select id="experience-category" name="category" required>
+              <option value="">Choose where this should appear on your resume</option>
+              <option value="Relevant Experience">Relevant Experience</option>
+              <option value="Work Experience">Work Experience</option>
+              <option value="Leadership &amp; Involvement">Leadership &amp; Involvement</option>
+              <option value="Volunteer Experience">Volunteer Experience</option>
+              <option value="Projects">Projects</option>
+              <option value="Research">Research</option>
+              <option value="Teaching / Clinical / Field Experience">Teaching / Clinical / Field Experience</option>
+              <option value="Additional Experience">Additional Experience</option>
+            </select>
+            <small>Choose the section name that best helps an employer understand this experience.</small>
+          </label>
+          <label class="field">
+            <span>Start date</span>
+            <input id="experience-start" name="start" type="month" required>
+          </label>
+          <label class="field" id="end-date-field">
+            <span>End date</span>
+            <input id="experience-end" name="end" type="month" required>
+          </label>
+        </div>
+        <label class="current-check"><input id="experience-current" name="current" type="checkbox"> I currently do this</label>
+        <p class="date-help">Your dates automatically place experiences in reverse chronological order within each category.</p>
+        <p class="form-error" id="form-error" role="alert"></p>
+        <div class="entry-actions">
+          <button type="button" class="text-button" id="cancel-edit" hidden>Cancel edit</button>
+          <button type="submit" class="secondary" id="add-experience">Add experience</button>
+        </div>
+      </form>
+
+      <div id="added-experiences" class="added-list" aria-label="Experiences added"></div>
+      <p class="input-hint" id="input-hint">Add at least 3 experiences.</p>
+
+      <div class="actions end">
+        <button type="button" class="primary" id="make-cards" disabled>Organize my resume <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section class="panel" id="step-2" aria-labelledby="step-2-title" hidden>
+      <div class="section-heading split-heading">
+        <div>
+          <p class="kicker">Step 2 of 2</p>
+          <h2 id="step-2-title" tabindex="-1">Build your resume order</h2>
+          <p>Review each experience category, then arrange the categories in the order you want them to appear.</p>
+        </div>
+        <button class="text-button" type="button" data-go="1">← Edit experiences</button>
+      </div>
+
+      <div class="tip-box"><strong>Check each category:</strong> Experiences are automatically listed from most recent to oldest within each section. To change that order, update the dates.</div>
+
+      <div id="organize-list" class="organize-list"></div>
+      <section class="section-order-box" aria-labelledby="section-order-title">
+        <h3 id="section-order-title">Arrange your resume sections</h3>
+        <p>Drag the sections—or use the arrow buttons—to put the most relevant section first.</p>
+        <div id="section-order-list" class="section-order-list"></div>
+      </section>
+
+      <div class="result-wrap">
+        <div class="result-heading">
+          <div>
+            <p class="kicker">Your starting structure</p>
+            <h2>Suggested resume order</h2>
+          </div>
+          <button type="button" class="secondary" id="copy-result">Copy my plan</button>
+        </div>
+        <div id="resume-output" class="resume-paper" aria-live="polite"></div>
+        <p class="fine-print">This is a planning guide, not a required formula. Adjust section names and order to match the opportunity.</p>
+      </div>
+
+      <div class="actions spread no-print">
+        <button type="button" class="text-button danger" id="reset-button">Start over</button>
+        <button type="button" class="primary" id="print-button">Print or save as PDF</button>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </main>
+  <script>
+(() => {
+  'use strict';
+
+  const MAX_EXPERIENCES = 8;
+  const MIN_EXPERIENCES = 2;
+  const SECTIONS = [
+    'Relevant Experience',
+    'Work Experience',
+    'Leadership & Involvement',
+    'Volunteer Experience',
+    'Projects',
+    'Research',
+    'Teaching / Clinical / Field Experience',
+    'Additional Experience'
+  ];
+
+  const state = { currentStep: 1, experiences: [], nextId: 1, editingId: null, sectionOrder: [] };
+  const form = document.querySelector('#experience-form');
+  const titleInput = document.querySelector('#experience-title');
+  const contextInput = document.querySelector('#experience-context');
+  const categoryInput = document.querySelector('#experience-category');
+  const startInput = document.querySelector('#experience-start');
+  const endInput = document.querySelector('#experience-end');
+  const currentInput = document.querySelector('#experience-current');
+  const endField = document.querySelector('#end-date-field');
+  const countText = document.querySelector('#experience-count');
+  const inputHint = document.querySelector('#input-hint');
+  const formError = document.querySelector('#form-error');
+  const addButton = document.querySelector('#add-experience');
+  const cancelEditButton = document.querySelector('#cancel-edit');
+  const addedList = document.querySelector('#added-experiences');
+  const makeCardsButton = document.querySelector('#make-cards');
+  const organizeList = document.querySelector('#organize-list');
+  const sectionOrderList = document.querySelector('#section-order-list');
+  const output = document.querySelector('#resume-output');
+  const toast = document.querySelector('#toast');
+
+  function save() {
+    try {
+      localStorage.setItem('resumeExperienceSorterV3', JSON.stringify({
+        experiences: state.experiences,
+        nextId: state.nextId,
+        sectionOrder: state.sectionOrder
+      }));
+    } catch (_) {}
+    postHeight();
+  }
+
+  function restore() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('resumeExperienceSorterV3'));
+      if (!saved) return;
+      if (Array.isArray(saved.experiences)) state.experiences = saved.experiences;
+      if (Number.isInteger(saved.nextId)) state.nextId = saved.nextId;
+      if (Array.isArray(saved.sectionOrder)) state.sectionOrder = saved.sectionOrder;
+    } catch (_) {}
+  }
+
+  function formatMonth(value) {
+    if (!value) return 'Month 20XX';
+    const [year, month] = value.split('-').map(Number);
+    return new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
+      .format(new Date(Date.UTC(year, month - 1, 1)));
+  }
+
+  function dateLabel(item) {
+    return `${formatMonth(item.start)}–${item.current ? 'Present' : formatMonth(item.end)}`;
+  }
+
+  function endValue(item) {
+    return item.current ? Number.MAX_SAFE_INTEGER : Number((item.end || '0000-00').replace('-', ''));
+  }
+
+  function resetForm() {
+    form.reset();
+    state.editingId = null;
+    endInput.disabled = false;
+    endInput.required = true;
+    endField.classList.remove('disabled-field');
+    document.querySelector('#entry-mode').textContent = 'New experience';
+    addButton.textContent = 'Add experience';
+    cancelEditButton.hidden = true;
+    formError.textContent = '';
+  }
+
+  function validateEntry() {
+    const title = titleInput.value.trim().replace(/\s+/g, ' ');
+    const context = contextInput.value.trim().replace(/\s+/g, ' ');
+    const section = categoryInput.value;
+    if (!title || !context || !section) {
+      return { error: 'Complete the experience name, context, and experience category.' };
+    }
+    if (!startInput.value || (!currentInput.checked && !endInput.value)) {
+      return { error: 'Add a start date and either an end date or select “I currently do this.”' };
+    }
+    if (!currentInput.checked && startInput.value > endInput.value) {
+      return { error: 'The end date must be after the start date.' };
+    }
+    const duplicate = state.experiences.find(item =>
+      item.id !== state.editingId &&
+      item.title.toLowerCase() === title.toLowerCase() &&
+      item.context.toLowerCase() === context.toLowerCase()
+    );
+    if (duplicate) return { error: 'That experience has already been added.' };
+    return {
+      title,
+      context,
+      section,
+      start: startInput.value,
+      end: currentInput.checked ? '' : endInput.value,
+      current: currentInput.checked
+    };
+  }
+
+  function updateStepOne() {
+    const count = state.experiences.length;
+    countText.textContent = `${count} of ${MAX_EXPERIENCES} added`;
+    makeCardsButton.disabled = count < MIN_EXPERIENCES;
+    addButton.disabled = count >= MAX_EXPERIENCES && state.editingId === null;
+    inputHint.textContent = count < MIN_EXPERIENCES
+      ? `Add ${MIN_EXPERIENCES - count} more to continue.`
+      : count === MAX_EXPERIENCES
+        ? 'You have added the maximum of 8 experiences.'
+        : 'Ready to organize—or add another experience.';
+
+    addedList.replaceChildren();
+    [...state.experiences].sort((a, b) => endValue(b) - endValue(a)).forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'added-card';
+      card.innerHTML = `
+        <div class="added-card-content">
+          <h3></h3>
+          <p class="added-context"></p>
+          <p class="added-date"></p>
+          <span class="added-category"></span>
+        </div>
+        <div class="added-actions">
+          <button type="button" class="mini-button edit-button">Edit</button>
+          <button type="button" class="mini-button remove-button">Remove</button>
+        </div>`;
+      card.querySelector('h3').textContent = item.title;
+      card.querySelector('.added-context').textContent = item.context;
+      card.querySelector('.added-date').textContent = dateLabel(item);
+      card.querySelector('.added-category').textContent = item.section;
+      card.querySelector('.edit-button').setAttribute('aria-label', `Edit ${item.title}`);
+      card.querySelector('.remove-button').setAttribute('aria-label', `Remove ${item.title}`);
+      card.querySelector('.edit-button').addEventListener('click', () => editExperience(item.id));
+      card.querySelector('.remove-button').addEventListener('click', () => {
+        state.experiences = state.experiences.filter(entry => entry.id !== item.id);
+        if (state.editingId === item.id) resetForm();
+        updateStepOne();
+        announce(`${item.title} removed.`);
+      });
+      addedList.append(card);
+    });
+    save();
+  }
+
+  function editExperience(id) {
+    const item = state.experiences.find(entry => entry.id === id);
+    if (!item) return;
+    state.editingId = id;
+    titleInput.value = item.title;
+    contextInput.value = item.context;
+    categoryInput.value = item.section;
+    startInput.value = item.start;
+    endInput.value = item.end;
+    currentInput.checked = item.current;
+    endInput.disabled = item.current;
+    endInput.required = !item.current;
+    endField.classList.toggle('disabled-field', item.current);
+    document.querySelector('#entry-mode').textContent = 'Editing experience';
+    addButton.textContent = 'Save changes';
+    cancelEditButton.hidden = false;
+    formError.textContent = '';
+    titleInput.focus();
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function setStep(step) {
+    if (step === 2 && state.experiences.length < MIN_EXPERIENCES) return;
+    state.currentStep = step;
+    document.querySelectorAll('section.panel[id^="step-"]').forEach(section => {
+      section.hidden = section.id !== `step-${step}`;
+    });
+    document.querySelectorAll('.step').forEach((button, index) => {
+      const number = index + 1;
+      button.classList.toggle('active', number === step);
+      button.classList.toggle('complete', number < step);
+      button.toggleAttribute('disabled', number > step);
+      if (number === step) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+    });
+    if (step === 2) renderOrganize();
+    document.querySelector(`#step-${step} h2`)?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    postHeight();
+  }
+
+  function ensureSectionOrder() {
+    const usedSections = [...new Set(state.experiences.map(item => item.section))];
+    state.sectionOrder = state.sectionOrder.filter(section => usedSections.includes(section));
+    const missing = usedSections
+      .filter(section => !state.sectionOrder.includes(section))
+      .sort((a, b) => {
+        const newestA = Math.max(...state.experiences.filter(item => item.section === a).map(endValue));
+        const newestB = Math.max(...state.experiences.filter(item => item.section === b).map(endValue));
+        return newestB - newestA;
+      });
+    state.sectionOrder.push(...missing);
+  }
+
+  function itemsForSection(section) {
+    return state.experiences
+      .filter(item => item.section === section)
+      .sort((a, b) => endValue(b) - endValue(a) || b.start.localeCompare(a.start));
+  }
+
+  function moveSection(section, direction) {
+    const index = state.sectionOrder.indexOf(section);
+    const otherIndex = index + direction;
+    if (index < 0 || otherIndex < 0 || otherIndex >= state.sectionOrder.length) return;
+    [state.sectionOrder[index], state.sectionOrder[otherIndex]] =
+      [state.sectionOrder[otherIndex], state.sectionOrder[index]];
+    renderOrganize();
+    announce(`${section} moved ${direction < 0 ? 'up' : 'down'}.`);
+  }
+
+  function renderOrganize() {
+    ensureSectionOrder();
+    organizeList.replaceChildren();
+    state.sectionOrder.forEach(section => {
+      itemsForSection(section).forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'organize-row';
+        row.innerHTML = `
+          <div>
+            <div class="organize-name"></div>
+            <div class="organize-context"></div>
+          </div>
+          <label>
+            <span class="select-label">Experience category</span>
+            <select></select>
+          </label>`;
+        row.querySelector('.organize-name').textContent = item.title;
+        row.querySelector('.organize-context').textContent = `${item.context} · ${dateLabel(item)}`;
+        const select = row.querySelector('select');
+        SECTIONS.forEach(optionSection => {
+          const option = document.createElement('option');
+          option.value = optionSection;
+          option.textContent = optionSection;
+          option.selected = optionSection === item.section;
+          select.append(option);
+        });
+        select.setAttribute('aria-label', `Experience category for ${item.title}`);
+        select.addEventListener('change', () => {
+          item.section = select.value;
+          renderOrganize();
+        });
+        organizeList.append(row);
+      });
+    });
+    renderSectionOrder();
+    renderOutput();
+    save();
+  }
+
+  function renderSectionOrder() {
+    sectionOrderList.replaceChildren();
+    state.sectionOrder.forEach((section, index) => {
+      const row = document.createElement('div');
+      row.className = 'section-order-row';
+      row.draggable = true;
+      row.dataset.section = section;
+      row.innerHTML = `
+        <span class="drag-handle" aria-hidden="true">⋮⋮</span>
+        <strong></strong>
+        <div class="section-move-buttons">
+          <button type="button" class="order-button move-section-up" aria-label="Move ${escapeHtml(section)} up" ${index === 0 ? 'disabled' : ''}>↑</button>
+          <button type="button" class="order-button move-section-down" aria-label="Move ${escapeHtml(section)} down" ${index === state.sectionOrder.length - 1 ? 'disabled' : ''}>↓</button>
+        </div>`;
+      row.querySelector('strong').textContent = section;
+      row.querySelector('.move-section-up').addEventListener('click', () => moveSection(section, -1));
+      row.querySelector('.move-section-down').addEventListener('click', () => moveSection(section, 1));
+      row.addEventListener('dragstart', event => {
+        row.classList.add('dragging');
+        event.dataTransfer.setData('text/plain', section);
+        event.dataTransfer.effectAllowed = 'move';
+      });
+      row.addEventListener('dragend', () => row.classList.remove('dragging'));
+      row.addEventListener('dragover', event => { event.preventDefault(); row.classList.add('drag-over'); });
+      row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+      row.addEventListener('drop', event => {
+        event.preventDefault();
+        row.classList.remove('drag-over');
+        const moved = event.dataTransfer.getData('text/plain');
+        if (!state.sectionOrder.includes(moved) || moved === section) return;
+        state.sectionOrder.splice(state.sectionOrder.indexOf(moved), 1);
+        state.sectionOrder.splice(state.sectionOrder.indexOf(section), 0, moved);
+        renderOrganize();
+        announce(`${moved} moved.`);
+      });
+      sectionOrderList.append(row);
+    });
+  }
+
+  function groupedExperiences() {
+    ensureSectionOrder();
+    return state.sectionOrder.map(section => [section, itemsForSection(section)]);
+  }
+
+  function renderOutput() {
+    output.replaceChildren();
+    groupedExperiences().forEach(([section, items]) => {
+      const group = document.createElement('section');
+      group.className = 'output-section';
+      const heading = document.createElement('h3');
+      heading.textContent = section;
+      const list = document.createElement('div');
+      list.className = 'output-list';
+      items.forEach(item => {
+        const entry = document.createElement('div');
+        entry.className = 'output-entry';
+        entry.innerHTML = `
+          <div class="output-entry-top">
+            <strong class="output-title"></strong>
+            <span class="output-date"></span>
+          </div>
+          <div class="output-context"></div>`;
+        entry.querySelector('.output-title').textContent = item.title;
+        entry.querySelector('.output-date').textContent = dateLabel(item);
+        entry.querySelector('.output-context').textContent = item.context;
+        list.append(entry);
+      });
+      group.append(heading, list);
+      output.append(group);
+    });
+    postHeight();
+  }
+
+  function resultText() {
+    const lines = ['SUGGESTED RESUME ORDER', ''];
+    groupedExperiences().forEach(([section, items]) => {
+      lines.push(section.toUpperCase());
+      items.forEach(item => {
+        lines.push(`${item.title}\t${dateLabel(item)}`);
+        lines.push(item.context);
+      });
+      lines.push('');
+    });
+    lines.push('Next: Use the Transferable Skills Finder and Resume Bullet Builder to develop the experiences you selected.');
+    return lines.join('\n');
+  }
+
+  async function copyResult() {
+    try {
+      const richHtml = ['<div>'];
+      groupedExperiences().forEach(([section, items]) => {
+        richHtml.push(`<p style="margin:14px 0 5px"><strong>${escapeHtml(section.toUpperCase())}</strong></p>`);
+        items.forEach(item => {
+          richHtml.push(
+            `<table style="width:100%;border-collapse:collapse;border:0;margin:0 0 8px"><tr>` +
+            `<td style="border:0;padding:0"><strong>${escapeHtml(item.title)}</strong></td>` +
+            `<td style="border:0;padding:0;text-align:right;white-space:nowrap">${escapeHtml(dateLabel(item))}</td>` +
+            `</tr><tr><td colspan="2" style="border:0;padding:0">${escapeHtml(item.context)}</td></tr></table>`
+          );
+        });
+      });
+      richHtml.push('</div>');
+      if (window.ClipboardItem && window.navigator.clipboard?.write) {
+        await window.navigator.clipboard.write([new window.ClipboardItem({
+          'text/plain': new window.Blob([resultText()], { type: 'text/plain' }),
+          'text/html': new window.Blob([richHtml.join('')], { type: 'text/html' })
+        })]);
+      } else {
+        await window.navigator.clipboard.writeText(resultText());
+      }
+      announce('Your resume plan was copied.');
+    } catch (_) {
+      const helper = document.createElement('textarea');
+      helper.value = resultText();
+      helper.setAttribute('readonly', '');
+      helper.style.position = 'fixed';
+      helper.style.opacity = '0';
+      document.body.append(helper);
+      helper.select();
+      document.execCommand('copy');
+      helper.remove();
+      announce('Your resume plan was copied.');
+    }
+  }
+
+  function announce(message) {
+    toast.textContent = message;
+    toast.hidden = false;
+    clearTimeout(announce.timer);
+    announce.timer = setTimeout(() => { toast.hidden = true; }, 2200);
+  }
+
+  function escapeHtml(value) {
+    return value.replace(/[&<>'"]/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[char]));
+  }
+
+  function postHeight() {
+    requestAnimationFrame(() => {
+      window.parent?.postMessage({
+        type: 'resume-sorter-height',
+        height: document.documentElement.scrollHeight
+      }, '*');
+    });
+  }
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    formError.textContent = '';
+    const entry = validateEntry();
+    if (entry.error) {
+      formError.textContent = entry.error;
+      return;
+    }
+    if (state.editingId !== null) {
+      const item = state.experiences.find(existing => existing.id === state.editingId);
+      Object.assign(item, entry);
+      announce(`${entry.title} updated.`);
+    } else {
+      state.experiences.push({ id: state.nextId++, ...entry });
+      announce(`${entry.title} added.`);
+    }
+    resetForm();
+    updateStepOne();
+    titleInput.focus();
+  });
+
+  currentInput.addEventListener('change', () => {
+    endInput.disabled = currentInput.checked;
+    endInput.required = !currentInput.checked;
+    if (currentInput.checked) endInput.value = '';
+    endField.classList.toggle('disabled-field', currentInput.checked);
+  });
+
+  cancelEditButton.addEventListener('click', resetForm);
+  document.querySelectorAll('.idea-chip').forEach(chip => {
+    chip.setAttribute('aria-pressed', 'false');
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.idea-chip').forEach(button => {
+        button.classList.toggle('selected', button === chip);
+        button.setAttribute('aria-pressed', String(button === chip));
+      });
+      document.querySelector('#idea-prompt').textContent = chip.dataset.prompt;
+      titleInput.focus();
+    });
+  });
+  makeCardsButton.addEventListener('click', () => setStep(2));
+  document.querySelectorAll('[data-go]').forEach(button => {
+    button.addEventListener('click', () => setStep(Number(button.dataset.go)));
+  });
+  document.querySelector('#copy-result').addEventListener('click', copyResult);
+  document.querySelector('#print-button').addEventListener('click', () => window.print());
+  document.querySelector('#reset-button').addEventListener('click', () => {
+    if (!window.confirm('Start over and clear all experiences?')) return;
+    state.experiences = [];
+    state.nextId = 1;
+    state.sectionOrder = [];
+    resetForm();
+    try {
+      localStorage.removeItem('resumeExperienceSorterV3');
+      localStorage.removeItem('resumeExperienceSorterV2');
+      localStorage.removeItem('resumeExperienceSorter');
+    } catch (_) {}
+    updateStepOne();
+    setStep(1);
+    announce('The activity was reset.');
+  });
+  window.addEventListener('resize', postHeight);
+  window.addEventListener('load', postHeight);
+
+  restore();
+  updateStepOne();
+})();
+
+  </script>
+</body>
+</html>
