@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quick Resume Builder</title>
+<style>
+:root{--black:#111;--yellow:#ffcd00;--gray:#5f5f5f;--light:#f3f3f3;--lighter:#fafafa;--line:#d6d6d6;--danger:#9c1c1c;--max:1180px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--black);background:#fff;line-height:1.45}
+.skip{position:absolute;left:-9999px}.skip:focus{left:16px;top:16px;background:#fff;padding:10px;border:2px solid #000;z-index:100}
+header{border-top:8px solid var(--yellow);border-bottom:1px solid var(--line);padding:28px 20px 22px}
+.wrap{max-width:var(--max);margin:auto}.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#555}
+h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.02;margin:.3rem 0 .6rem}h2{font-size:1.45rem;margin:.2rem 0 .35rem}h3{font-size:1.05rem;margin:.15rem 0 .4rem}
+.lead{max-width:830px;font-size:1.05rem;margin:0;color:#444}.meta{margin-top:12px;color:#555;font-size:.9rem}
+main{padding:24px 20px 52px}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.72fr);gap:24px;align-items:start}
+.panel{border:1px solid var(--line);padding:18px;margin-bottom:16px;background:#fff}.panel.soft{background:var(--lighter)}
+.notice{padding:12px 14px;background:#fff8d9;border-left:4px solid var(--yellow);margin:0 0 16px}.notice strong{display:block;margin-bottom:2px}
+.progress{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}.progress div{border:1px solid var(--line);padding:8px 10px;background:#fff;font-size:.84rem}.progress strong{display:block}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.field{margin:10px 0}.field label{display:block;font-weight:700;margin-bottom:5px}.hint{font-size:.86rem;color:#666;margin-top:4px}.req{font-size:.8rem;color:#666;font-weight:400}
+input,select,textarea{width:100%;font:inherit;padding:9px 10px;border:1px solid #999;background:#fff;color:#111}textarea{resize:vertical;min-height:76px}
+input:focus,select:focus,textarea:focus,button:focus,a:focus,summary:focus{outline:3px solid var(--yellow);outline-offset:2px}input[aria-invalid=true],select[aria-invalid=true]{border:2px solid var(--danger)}
+button,.btn{appearance:none;border:1px solid #111;background:#111;color:#fff;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#fff;color:#111}.light{background:var(--light);color:#111;border-color:#bbb}.mini{padding:7px 10px;font-size:.86rem}.danger{background:#fff;color:var(--danger);border-color:#c8a3a3}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.status{font-weight:700;margin-top:10px}.hidden{display:none!important}
+details.inline-help{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}details.inline-help summary{cursor:pointer;font-weight:700}.idea-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}.idea{border:1px solid #bbb;background:#fff;color:#111;text-align:left;padding:8px 10px;font-weight:600}
+.exp-card{border:1px solid var(--line);margin:14px 0}.exp-head{background:var(--light);padding:10px 12px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.exp-head strong{display:block}.exp-body{padding:12px}
+.section-select-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bullet-list{margin-top:8px}.bullet-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;margin:7px 0}.bullet-row button{padding:8px 10px;background:#fff;color:#111;border-color:#aaa}
+.helper{border:1px solid #cfcfcf;background:#fafafa;padding:13px;margin:12px 0}.helper h4{margin:0 0 5px;font-size:1rem}.competency-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:9px 0}.choice{border:1px solid #bbb;background:#fff;color:#111;text-align:left;padding:8px 9px}.choice[aria-pressed=true]{background:#e7e7e7;border-color:#777}.verb-grid{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0 10px}.verb{background:#fff;color:#111;border-color:#aaa;padding:6px 8px;font-size:.83rem}.verb[aria-pressed=true]{background:#e7e7e7;border-color:#777}
+.data-nudge{background:#fff;border-left:3px solid #999;padding:9px 10px;margin:8px 0}.data-nudge strong{display:block;margin-bottom:2px}.generated{background:#fff;border:1px solid #bbb;padding:10px;margin-top:10px}.generated strong{display:block;margin-bottom:4px}
+.optional-block{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}.optional-block summary{cursor:pointer;font-weight:700}
+.preview-wrap{position:sticky;top:12px}.preview{border:1px solid var(--line);background:#fafafa;padding:16px}.preview h2{font-size:1rem;margin:0 0 4px}.preview-note{font-size:.83rem;color:#666;margin:0 0 12px}.p-name{text-align:center;font-weight:700;font-size:1.2rem}.p-contact{text-align:center;font-size:.86rem}.p-section{font-weight:700;margin:15px 0 3px}.p-row{display:flex;justify-content:space-between;gap:10px}.p-right{white-space:nowrap;text-align:right}.p-bold{font-weight:700}.p-exp{margin:0 0 12px}.p-exp ul{margin:3px 0 0;padding-left:18px}.p-small{font-size:.88rem}.p-empty{color:#777;font-style:italic}
+.download-box{background:#fafafa;border:2px solid #111;padding:16px}.download-box p{margin:.3rem 0 .8rem}.footer-note{font-size:.86rem;color:#666}
+@media(max-width:940px){.layout{grid-template-columns:1fr}.preview-wrap{position:static}.progress{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.row,.row3,.row4,.section-select-wrap,.competency-grid,.idea-grid{grid-template-columns:1fr}.p-row{display:block}.p-right{display:block;text-align:left}.progress{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#builder">Skip to resume builder</a>
+<header>
+<div class="wrap">
+  <div class="eyebrow">Quick resume tool</div>
+  <h1>Build your resume</h1>
+  <p class="lead">Create a strong starting resume in one place. Add your information, experiences, and skills; use optional bullet help when you need it; then download an editable Word resume.</p>
+  <div class="meta">Your entries stay in this browser. You can edit the downloaded Word file before using it for an application.</div>
+</div>
+</header>
+<main id="builder">
+<div class="wrap">
+  <div id="migrateNotice" class="notice hidden"><strong>We found resume information you already entered.</strong>Your previous header, education, experiences, and bullets were brought into this builder so you do not have to start over.</div>
+  <div class="progress" aria-label="Resume builder steps">
+    <div><strong>1 · Basics</strong>Header &amp; education</div><div><strong>2 · Experiences</strong>Add &amp; describe</div><div><strong>3 · Skills</strong>Technical &amp; languages</div><div><strong>4 · Download</strong>Editable Word resume</div>
+  </div>
+
+  <div class="layout">
+  <div>
+    <section class="panel">
+      <div class="eyebrow">1 · Basics</div><h2>Header</h2>
+      <div class="row">
+        <div class="field"><label for="name">Name <span class="req">(required)</span></label><input id="name" autocomplete="name"></div>
+        <div class="field"><label for="email">Email <span class="req">(required)</span></label><input id="email" type="email" autocomplete="email"></div>
+        <div class="field"><label for="phone">Phone</label><input id="phone" autocomplete="tel"></div>
+        <div class="field"><label for="linkedin">LinkedIn <span class="req">(optional)</span></label><input id="linkedin" placeholder="linkedin.com/in/yourname"></div>
+        <div class="field"><label for="streetAddress">Street address <span class="req">(optional)</span></label><input id="streetAddress" autocomplete="street-address" placeholder="123 Main Street"></div>
+        <div class="field"><label for="city">City <span class="req">(required)</span></label><input id="city" autocomplete="address-level2" placeholder="Iowa City"></div>
+        <div class="field"><label for="state">State abbreviation (ST) <span class="req">(required)</span></label><input id="state" autocomplete="address-level1" placeholder="IA" maxlength="2"><div class="hint">Use the 2-letter abbreviation, such as IA.</div></div>
+      </div>
+
+      <h2 style="margin-top:22px">Education</h2>
+      <div class="row">
+        <div class="field"><label for="school">School <span class="req">(required)</span></label><input id="school" value="University of Iowa"></div>
+        <div class="field"><label for="schoolLocation">School location</label><input id="schoolLocation" value="Iowa City, IA"></div>
+        <div class="field"><label for="degree">Degree <span class="req">(required)</span></label><select id="degree"><option value="">Choose</option><option>BA</option><option>BS</option><option>BBA</option><option>BFA</option><option>Other</option></select></div>
+        <div class="field hidden" id="otherDegreeWrap"><label for="otherDegree">Degree name</label><input id="otherDegree"></div>
+        <div class="field"><label for="major">Major <span class="req">(required)</span></label><input id="major" placeholder="Psychology"></div>
+        <div class="field"><label for="gradMonth">Anticipated graduation month <span class="req">(required)</span></label><select id="gradMonth"></select></div>
+        <div class="field"><label for="gradYear">Anticipated graduation year <span class="req">(required)</span></label><select id="gradYear"></select></div>
+      </div>
+      <details class="optional-block"><summary>Add optional education details</summary>
+        <div class="row">
+          <div class="field"><label for="minor">Minor</label><input id="minor" placeholder="Spanish"></div>
+          <div class="field"><label for="certificates">Certificate(s)</label><input id="certificates" placeholder="Writing; Public Health"></div>
+          <div class="field"><label for="gpa">GPA</label><input id="gpa" inputmode="decimal" placeholder="3.62"><div class="hint">Enter the number only; /4.0 will be added automatically.</div></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <div class="eyebrow">2 · Experiences</div><h2>Add experiences</h2>
+      <p class="hint">Paid work is only one option. You can include internships, leadership, involvement, volunteering, research, projects, athletics, teaching/clinical/field work, and other relevant experiences.</p>
+      <details class="inline-help"><summary>Not sure what counts as experience? Show ideas</summary>
+        <div class="idea-grid" id="ideaGrid"></div>
+        <div class="hint">Choose an idea to add a blank experience with a suggested section. Rename it with the specific title you would put on your resume.</div>
+      </details>
+      <div id="experienceEditor"></div>
+      <div class="actions"><button type="button" id="addExperience" class="secondary">+ Add an experience</button></div>
+    </section>
+
+    <section class="panel">
+      <div class="eyebrow">3 · Skills</div><h2>Technical &amp; language skills</h2>
+      <p class="hint">Add specific technical tools or spoken languages. Do not list general qualities such as communication or teamwork here.</p>
+      <details id="skillsDetails"><summary><strong>+ Add Computer Skills or Languages</strong></summary>
+        <h3 style="margin-top:14px">Computer Skills</h3>
+        <div class="field"><label for="programmingLanguages">Programming / computer languages</label><input id="programmingLanguages" placeholder="Python, Java, SQL"><div class="hint">On the resume this appears as <strong>Languages:</strong> under Computer Skills.</div></div>
+        <div class="field"><label for="operatingSystems">Operating Systems</label><input id="operatingSystems" placeholder="Windows, macOS, Linux"></div>
+        <div class="field"><label for="software">Software</label><input id="software" placeholder="Microsoft Excel, SPSS, Adobe Photoshop"></div>
+        <h3 style="margin-top:16px">Languages</h3>
+        <div class="field"><label for="spokenLanguages">Spoken / written languages</label><input id="spokenLanguages" placeholder="Spanish (conversational)"><div class="hint">Use this for languages such as Spanish or Arabic—not programming languages.</div></div>
+      </details>
+    </section>
+
+    <section class="download-box" aria-labelledby="downloadTitle">
+      <div class="eyebrow">4 · Finish</div><h2 id="downloadTitle">Download your Word resume</h2>
+      <p>The Word file uses consistent margins, Arial type, bold role titles, true right-aligned dates, real bullets, and no decorative section lines. It remains fully editable.</p>
+      <div class="actions"><button id="downloadResume" type="button">Download My Resume (.docx)</button><a id="nextPage" class="btn secondary" href="#">Next →</a></div>
+      <div id="downloadStatus" class="status" aria-live="polite"></div>
+      <a id="downloadAgain" class="hidden" href="#">Download the Word resume again</a>
+    </section>
+  </div>
+
+  <aside class="preview-wrap" aria-label="Resume content preview">
+    <div class="preview">
+      <h2>Content preview</h2>
+      <p class="preview-note">Use this to check your content and order. The downloaded Word file handles the final page formatting.</p>
+      <div id="preview"></div>
+    </div>
+  </aside>
+  </div>
+</div>
+</main>
+<script src="https://unpkg.com/docx@8.2.4/build/index.umd.js"></script>
+<script>
+(()=>{
+'use strict';
+const STORAGE_KEY='pccResumeBuilderUnifiedV2';
+const OLD_KEY='pccResumeBuilderDataV1';
+const BULLET_BANK_KEY='pccResumeBulletBankV2';
+const NEXT_ICON_URL=new URLSearchParams(location.search).get('next')||'';
+const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const sections=['Relevant Experience','Work Experience','Leadership & Involvement','Volunteer Experience','Projects','Research','Teaching / Clinical / Field Experience','Additional Experience'];
+const ideas=[
+  ['Job or internship','Work Experience'],['Student organization','Leadership & Involvement'],['Volunteer or service','Volunteer Experience'],['Class or independent project','Projects'],['Research','Research'],['Athletics','Leadership & Involvement'],['Teaching / clinical / field work','Teaching / Clinical / Field Experience'],['Other experience','Additional Experience']
+];
+const competencies={
+  'Career & Self-Development':['Developed','Improved','Learned','Pursued','Adapted','Sought'],
+  'Communication':['Communicated','Explained','Presented','Wrote','Responded','Clarified'],
+  'Critical Thinking':['Analyzed','Evaluated','Resolved','Identified','Investigated','Improved'],
+  'Teamwork':['Collaborated','Partnered','Supported','Contributed','Coordinated','Assisted'],
+  'Leadership':['Led','Coordinated','Organized','Delegated','Mentored','Directed'],
+  'Professionalism':['Managed','Completed','Maintained','Prioritized','Prepared','Delivered'],
+  'Technology':['Created','Operated','Updated','Tracked','Designed','Automated']
+};
+const $=id=>document.getElementById(id);
+let data={version:2,fields:{},experiences:[]};
+let lastDownloadUrl='';
+
+function uid(){return (crypto?.randomUUID?.()||('e'+Date.now()+Math.random().toString(16).slice(2)))}
+function escapeHtml(v=''){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function attr(v=''){return escapeHtml(v).replace(/`/g,'&#96;')}
+function noPeriod(s=''){return String(s||'').replace(/^\s*[•\-*]\s*/,'').trim().replace(/[.]+\s*$/,'')}
+function capState(s=''){return String(s||'').replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase()}
+function parseLocation(value=''){const raw=String(value||'').trim();const m=raw.match(/^(.*?),\s*([A-Za-z]{2})$/);return m?{city:m[1].trim(),state:m[2].toUpperCase()}:{city:raw,state:''}}
+function normalizeTitle(v=''){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function getBulletBank(){try{const b=JSON.parse(localStorage.getItem(BULLET_BANK_KEY)||'[]');return Array.isArray(b)?b:[]}catch(_){return []}}
+function savedBulletsFor(exp){const title=normalizeTitle(exp.title);return getBulletBank().filter(x=>(x.experienceId&&String(x.experienceId)===String(exp.id))||(!x.experienceId&&title&&normalizeTitle(x.experienceTitle)===title)).map(x=>noPeriod(x.text||'')).filter(Boolean)}
+function dateLabel(e){const sm=months[Number(e.startMonth)-1]||'';const start=[sm,e.startYear].filter(Boolean).join(' ');let end='';if(e.current)end='Present';else{const em=months[Number(e.endMonth)-1]||'';end=[em,e.endYear].filter(Boolean).join(' ')}return start&&end?`${start}–${end}`:start||end}
+function endKey(e){return e.current?999999:Number(`${e.endYear||'0'}${String(e.endMonth||'12').padStart(2,'0')}`)}
+function expLoc(e){return [e.expCity,capState(e.expState)].filter(Boolean).join(', ')}
+function field(id){return $(id)?.value?.trim?.()||''}
+
+function defaultExp(section='Work Experience',title=''){
+  return {id:uid(),title,org:'',section,startMonth:'',startYear:'',endMonth:'',endYear:'',current:false,expCity:'',expState:'',bullets:[''],helper:{open:false,competency:'',verb:'',action:'',context:'',data:'',result:''}};
+}
+function normalizeOld(old){
+  const f=old?.starterFields||old?.fields||{};
+  const experiences=(old?.experiences||[]).map(e=>{
+    const p=parseLocation(e.location||'');
+    return {id:e.id||uid(),title:e.title||'',org:e.org||'',section:e.section||'Additional Experience',startMonth:e.startMonth||'',startYear:e.startYear||'',endMonth:e.endMonth||'',endYear:e.endYear||'',current:!!e.current,expCity:e.expCity||p.city||'',expState:capState(e.expState||p.state||''),bullets:(Array.isArray(e.bullets)&&e.bullets.length?e.bullets:['']).map(noPeriod),helper:{open:false,competency:'',verb:'',action:'',context:'',data:'',result:''}};
+  });
+  return {version:2,fields:f,experiences};
+}
+function decodeBase64url(raw=''){try{let b=raw.replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';const bin=atob(b);const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes))}catch(_){return null}}
+function load(){
+  let saved=null,old=null,imported=null;
+  const hash=new URLSearchParams(location.hash.replace(/^#/,''));
+  if(hash.get('resumeData'))imported=decodeBase64url(hash.get('resumeData'));
+  if(imported?.experiences?.length){data=normalizeOld(imported);$('migrateNotice').classList.remove('hidden');save();return}
+  try{saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')}catch(_){}
+  if(saved){data=normalizeOld(saved);return}
+  try{old=JSON.parse(localStorage.getItem(OLD_KEY)||'null')}catch(_){}
+  if(old?.experiences?.length||old?.starterFields){data=normalizeOld(old);$('migrateNotice').classList.remove('hidden');save();return}
+  data={version:2,fields:{},experiences:[defaultExp('Work Experience','')]};
+}
+function save(){
+  const ids=['name','email','phone','linkedin','streetAddress','city','state','school','schoolLocation','degree','otherDegree','major','gradMonth','gradYear','minor','certificates','gpa','programmingLanguages','operatingSystems','software','spokenLanguages'];
+  ids.forEach(id=>{if($(id))data.fields[id]=$(id).value});
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(_){}
+}
+function restore(){Object.entries(data.fields||{}).forEach(([k,v])=>{if($(k))$(k).value=v});$('otherDegreeWrap').classList.toggle('hidden',$('degree').value!=='Other');if(field('programmingLanguages')||field('operatingSystems')||field('software')||field('spokenLanguages'))$('skillsDetails').open=true}
+function monthOptions(sel=''){return '<option value="">Month</option>'+months.map((m,i)=>`<option value="${i+1}"${String(sel)===String(i+1)?' selected':''}>${m}</option>`).join('')}
+function yearOptions(sel=''){const now=new Date().getFullYear();let h='<option value="">Year</option>';for(let y=now+8;y>=now-12;y--)h+=`<option${String(sel)===String(y)?' selected':''}>${y}</option>`;return h}
+function fillGrad(){const now=new Date().getFullYear();$('gradMonth').innerHTML='<option value="">Month</option>'+months.map(m=>`<option>${m}</option>`).join('');$('gradYear').innerHTML='<option value="">Year</option>'+Array.from({length:9},(_,i)=>now+i).map(y=>`<option>${y}</option>`).join('')}
+function sectionOptions(selected){return '<option value="">Choose a resume section</option>'+sections.map(s=>`<option${s===selected?' selected':''}>${s}</option>`).join('')+'<option value="__custom"'+(sections.includes(selected)?'':' selected')+'>Create my own section…</option>'}
+
+function renderIdeas(){
+  $('ideaGrid').innerHTML=ideas.map(([label,section])=>`<button type="button" class="idea" data-idea="${attr(label)}" data-section="${attr(section)}">${escapeHtml(label)}</button>`).join('');
+}
+function renderExperiences(){
+  if(!data.experiences.length){$('experienceEditor').innerHTML='<p class="hint">No experiences added yet.</p>';return}
+  $('experienceEditor').innerHTML=data.experiences.map((e,idx)=>{
+    const helper=e.helper||{};const custom=!sections.includes(e.section||'');
+    return `<article class="exp-card" data-id="${attr(e.id)}">
+      <div class="exp-head"><div><strong>${escapeHtml(e.title||`Experience ${idx+1}`)}</strong><span class="hint">${escapeHtml(e.section||'Choose a section')}</span></div><button type="button" class="mini danger" data-remove="${attr(e.id)}">Remove</button></div>
+      <div class="exp-body">
+        <div class="row">
+          <div class="field"><label>Role, project, or activity name</label><input data-field="title" value="${attr(e.title)}" placeholder="Resident Assistant"></div>
+          <div class="field"><label>Organization, course, or setting</label><input data-field="org" value="${attr(e.org)}" placeholder="University Housing"></div>
+        </div>
+        <div class="section-select-wrap">
+          <div class="field"><label>Where should this appear on your resume?</label><select data-field="sectionChoice">${sectionOptions(e.section)}</select></div>
+          <div class="field ${custom?'':'hidden'}" data-custom-wrap><label>Custom section name</label><input data-field="customSection" value="${custom?attr(e.section):''}" placeholder="Campus Experience"></div>
+        </div>
+        <div class="row4">
+          <div class="field"><label>City <span class="req">(required)</span></label><input data-field="expCity" value="${attr(e.expCity)}" placeholder="Iowa City"></div>
+          <div class="field"><label>State (ST) <span class="req">(required)</span></label><input data-field="expState" value="${attr(e.expState)}" placeholder="IA" maxlength="2"><div class="hint">2 letters</div></div>
+          <div class="field"><label>Start</label><select data-field="startMonth">${monthOptions(e.startMonth)}</select><select data-field="startYear" style="margin-top:5px">${yearOptions(e.startYear)}</select></div>
+          <div class="field"><label>End</label><select data-field="endMonth" ${e.current?'disabled':''}>${monthOptions(e.endMonth)}</select><select data-field="endYear" style="margin-top:5px" ${e.current?'disabled':''}>${yearOptions(e.endYear)}</select><label style="font-weight:400;margin-top:6px"><input type="checkbox" data-field="current" style="width:auto" ${e.current?'checked':''}> I currently do this</label></div>
+        </div>
+
+        <div class="field"><label>Resume bullets</label>
+          <div class="bullet-list">${(e.bullets||['']).map((b,i)=>`<div class="bullet-row"><textarea data-bullet="${i}" aria-label="Bullet ${i+1} for ${attr(e.title||'this experience')}">${escapeHtml(noPeriod(b))}</textarea><button type="button" data-delete-bullet="${i}" aria-label="Remove bullet ${i+1}">×</button></div>`).join('')}</div>
+          <div class="actions"><button type="button" class="mini light" data-add-bullet="${attr(e.id)}">+ Add bullet</button>${savedBulletsFor(e).length?`<button type="button" class="mini secondary" data-use-saved="${attr(e.id)}">Use ${savedBulletsFor(e).length} saved bullet${savedBulletsFor(e).length===1?'':'s'}</button>`:''}<button type="button" class="mini secondary" data-toggle-helper="${attr(e.id)}">${helper.open?'Hide bullet help':'Need help writing a bullet?'}</button></div>
+        </div>
+        ${helper.open?renderHelper(e):''}
+      </div>
+    </article>`;
+  }).join('');
+}
+function renderHelper(e){
+  const h=e.helper||{};const verbs=h.competency?competencies[h.competency]||[]:[];
+  return `<section class="helper" aria-label="Bullet writing help">
+    <h4>Build one bullet</h4><div class="hint">Choose one competency to focus the bullet. The competency itself will not appear on your resume.</div>
+    <div class="field"><label>NACE competency</label><select data-helper="competency"><option value="">Choose one</option>${Object.keys(competencies).map(c=>`<option value="${attr(c)}"${h.competency===c?' selected':''}>${escapeHtml(c)}</option>`).join('')}</select></div>
+    ${h.competency?`<div class="field"><label>Choose a power verb</label><div class="verb-grid">${verbs.map(v=>`<button type="button" class="verb" data-verb="${attr(v)}" aria-pressed="${h.verb===v?'true':'false'}">${escapeHtml(v)}</button>`).join('')}</div><input data-helper="verb" value="${attr(h.verb||'')}" placeholder="Or type your own power verb"></div>`:''}
+    <div class="field"><label>What did you do?</label><textarea data-helper="action" placeholder="Example: resolved customer questions and scheduling issues">${escapeHtml(h.action||'')}</textarea></div>
+    <div class="field"><label>How, with what, or for whom? <span class="req">(optional)</span></label><input data-helper="context" value="${attr(h.context||'')}" placeholder="Example: using scheduling software and policy resources"></div>
+    <div class="data-nudge"><strong>Could a number make this clearer?</strong><span class="hint">Use data when it adds useful scale—such as people served, frequency, team size, items, dollars, time, or percentage change. Skip it if a number would not help.</span></div>
+    <div class="field"><label>Scale or data <span class="req">(optional)</span></label><input data-helper="data" value="${attr(h.data||'')}" placeholder="Example: 20–30 customers per shift"></div>
+    <div class="field"><label>Result, purpose, or outcome <span class="req">(optional)</span></label><input data-helper="result" value="${attr(h.result||'')}" placeholder="Example: to keep appointments running on time"></div>
+    <div class="actions"><button type="button" class="mini" data-generate="${attr(e.id)}">Add this bullet to my experience</button></div>
+    <div class="generated ${h.generated?'':'hidden'}" data-generated><strong>Bullet added</strong><span>${escapeHtml(h.generated||'')}</span></div>
+  </section>`;
+}
+function helperBullet(h){
+  const verb=(h.verb||'').trim();let action=(h.action||'').trim();if(!verb||!action)return'';
+  action=action.replace(/^\s*[A-Z][a-z]+\s+/,'');
+  const parts=[`${verb} ${action}`];
+  if((h.context||'').trim())parts.push((h.context||'').trim());
+  if((h.data||'').trim())parts.push((h.data||'').trim());
+  if((h.result||'').trim())parts.push((h.result||'').trim());
+  return noPeriod(parts.join(', ').replace(/\s+,/g,','));
+}
+
+$('ideaGrid').addEventListener('click',e=>{const b=e.target.closest('[data-idea]');if(!b)return;data.experiences.push(defaultExp(b.dataset.section,b.dataset.idea==='Other experience'?'':b.dataset.idea));save();renderExperiences();renderPreview();document.querySelector('.exp-card:last-of-type')?.scrollIntoView({behavior:'smooth',block:'center'})});
+$('addExperience').addEventListener('click',()=>{data.experiences.push(defaultExp('Work Experience',''));save();renderExperiences();renderPreview()});
+$('experienceEditor').addEventListener('input',e=>{
+  const card=e.target.closest('.exp-card');if(!card)return;const exp=data.experiences.find(x=>String(x.id)===String(card.dataset.id));if(!exp)return;
+  if(e.target.dataset.field){const k=e.target.dataset.field;if(k==='expState')e.target.value=capState(e.target.value);if(k==='customSection'){exp.section=e.target.value}else if(k!=='sectionChoice'&&k!=='current')exp[k]=e.target.value}
+  if(e.target.dataset.bullet!==undefined){exp.bullets[Number(e.target.dataset.bullet)]=noPeriod(e.target.value)}
+  if(e.target.dataset.helper){exp.helper=exp.helper||{};const hk=e.target.dataset.helper;exp.helper[hk]=e.target.value;if(hk==='competency'){exp.helper.verb='';save();renderExperiences();return}}
+  save();renderPreview();
+});
+$('experienceEditor').addEventListener('change',e=>{
+  const card=e.target.closest('.exp-card');if(!card)return;const exp=data.experiences.find(x=>String(x.id)===String(card.dataset.id));if(!exp)return;
+  if(e.target.dataset.field && !['sectionChoice','current'].includes(e.target.dataset.field)){const k=e.target.dataset.field;if(k==='expState')e.target.value=capState(e.target.value);exp[k]=e.target.value}
+  if(e.target.dataset.field==='sectionChoice'){if(e.target.value==='__custom'){exp.section='';card.querySelector('[data-custom-wrap]')?.classList.remove('hidden')}else{exp.section=e.target.value;card.querySelector('[data-custom-wrap]')?.classList.add('hidden')}}
+  if(e.target.dataset.field==='current'){exp.current=e.target.checked;if(exp.current){exp.endMonth='';exp.endYear=''}renderExperiences()}
+  save();renderPreview();
+});
+$('experienceEditor').addEventListener('click',e=>{
+  const card=e.target.closest('.exp-card');const id=card?.dataset.id;const exp=data.experiences.find(x=>String(x.id)===String(id));
+  if(e.target.dataset.remove){data.experiences=data.experiences.filter(x=>String(x.id)!==String(e.target.dataset.remove));save();renderExperiences();renderPreview();return}
+  if(!exp)return;
+  if(e.target.dataset.addBullet){exp.bullets.push('');save();renderExperiences();return}
+  if(e.target.dataset.useSaved){const incoming=savedBulletsFor(exp);const existing=(exp.bullets||[]).map(noPeriod).filter(Boolean);exp.bullets=[...new Set([...existing,...incoming])];if(!exp.bullets.length)exp.bullets=[''];save();renderExperiences();renderPreview();return}
+  if(e.target.dataset.deleteBullet!==undefined){exp.bullets.splice(Number(e.target.dataset.deleteBullet),1);if(!exp.bullets.length)exp.bullets=[''];save();renderExperiences();renderPreview();return}
+  if(e.target.dataset.toggleHelper){exp.helper=exp.helper||{};exp.helper.open=!exp.helper.open;save();renderExperiences();return}
+  const verb=e.target.closest('[data-verb]');if(verb){exp.helper=exp.helper||{};exp.helper.verb=verb.dataset.verb;save();renderExperiences();return}
+  if(e.target.dataset.generate){const bullet=helperBullet(exp.helper||{});if(!bullet){alert('Choose or enter a power verb and describe what you did first.');return}const blank=exp.bullets.findIndex(x=>!String(x||'').trim());if(blank>=0)exp.bullets[blank]=bullet;else exp.bullets.push(bullet);exp.helper.generated=bullet;save();renderExperiences();renderPreview();return}
+});
+
+function getGroups(){
+  const g={};data.experiences.forEach(e=>{if(!e.section||(!e.title&&!e.org))return;(g[e.section]??=[]).push(e)});Object.values(g).forEach(arr=>arr.sort((a,b)=>endKey(b)-endKey(a)));return g;
+}
+function orderedSections(groups){const standard=[...sections];const customs=Object.keys(groups).filter(x=>!standard.includes(x));return [...standard,...customs].filter(x=>groups[x]?.length)}
+function educationLine(){const degree=field('degree')==='Other'?field('otherDegree'):field('degree');return [degree,field('major')].filter(Boolean).join(' ')}
+function gradLine(){return [field('gradMonth'),field('gradYear')].filter(Boolean).join(' ')}
+function gpaLine(){const g=field('gpa').replace(/\/4\.0$/,'').trim();return g?`${g}/4.0`:''}
+function addressLine(){return [field('streetAddress'),[field('city'),capState(field('state'))].filter(Boolean).join(', ')].filter(Boolean).join(' | ')}
+function renderPreview(){
+  let html='';const name=field('name');const contact=[field('email'),field('phone'),field('linkedin')].filter(Boolean).join(' | ');const addr=addressLine();
+  html+=`<div class="p-name">${escapeHtml((name||'YOUR NAME').toUpperCase())}</div>${contact?`<div class="p-contact">${escapeHtml(contact)}</div>`:''}${addr?`<div class="p-contact">${escapeHtml(addr)}</div>`:''}`;
+  if(field('school')||educationLine()){html+=`<div class="p-section">EDUCATION</div><div class="p-row"><span class="p-bold">${escapeHtml([field('school'),field('schoolLocation')].filter(Boolean).join(', '))}</span><span class="p-right">${gradLine()?`Anticipated ${escapeHtml(gradLine())}`:''}</span></div><div>${escapeHtml(educationLine())}</div>`;const eb=[];if(field('minor'))eb.push(`Minor: ${field('minor')}`);if(field('certificates'))eb.push(`Certificate${field('certificates').includes(';')?'s':''}: ${field('certificates').replace(/;/g,', ')}`);if(gpaLine())eb.push(`GPA: ${gpaLine()}`);if(eb.length)html+=`<ul>${eb.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`}
+  const groups=getGroups();orderedSections(groups).forEach(s=>{html+=`<div class="p-section">${escapeHtml(s.toUpperCase())}</div>`;groups[s].forEach(e=>{const bullets=(e.bullets||[]).map(noPeriod).filter(Boolean);html+=`<div class="p-exp"><div class="p-row"><span class="p-bold">${escapeHtml(e.title||'Experience Title')}</span><span class="p-right">${escapeHtml(dateLabel(e))}</span></div><div class="p-small">${escapeHtml([e.org,expLoc(e)].filter(Boolean).join(', '))}</div>${bullets.length?`<ul>${bullets.map(b=>`<li>${escapeHtml(b)}</li>`).join('')}</ul>`:'<div class="p-empty">Add bullets</div>'}</div>`})});
+  if(field('programmingLanguages')||field('operatingSystems')||field('software')){html+=`<div class="p-section">COMPUTER SKILLS</div>${field('programmingLanguages')?`<div><span class="p-bold">Languages:</span> ${escapeHtml(field('programmingLanguages'))}</div>`:''}${field('operatingSystems')?`<div><span class="p-bold">Operating Systems:</span> ${escapeHtml(field('operatingSystems'))}</div>`:''}${field('software')?`<div><span class="p-bold">Software:</span> ${escapeHtml(field('software'))}</div>`:''}`}
+  if(field('spokenLanguages'))html+=`<div class="p-section">LANGUAGES</div><div>${escapeHtml(field('spokenLanguages'))}</div>`;
+  $('preview').innerHTML=html;
+}
+
+function validate(){
+  const req=[['name','Name'],['email','Email'],['city','City'],['state','State abbreviation (ST)'],['school','School'],['degree','Degree'],['major','Major'],['gradMonth','graduation month'],['gradYear','graduation year']];const missing=[];let first=null;
+  document.querySelectorAll('[aria-invalid=true]').forEach(x=>x.removeAttribute('aria-invalid'));
+  req.forEach(([id,label])=>{const el=$(id);if(!field(id)){missing.push(label);el.setAttribute('aria-invalid','true');first??=el}});
+  if(field('state')&&!/^[A-Za-z]{2}$/.test(field('state'))){missing.push('a 2-letter State abbreviation');$('state').setAttribute('aria-invalid','true');first??=$('state')}
+  if(field('email')&&!$('email').checkValidity()){missing.push('a valid email');$('email').setAttribute('aria-invalid','true');first??=$('email')}
+  for(const exp of data.experiences){if(!exp.title&&!exp.org)continue;if(!exp.title||!exp.org||!exp.section||!exp.expCity||!/^[A-Za-z]{2}$/.test(exp.expState||'')){missing.push(`complete title, organization, section, City and ST for ${exp.title||'an experience'}`);const card=document.querySelector(`[data-id="${CSS.escape(String(exp.id))}"]`);first??=card?.querySelector('input,select');break}}
+  if(missing.length){$('downloadStatus').textContent='Before downloading, add '+missing.join('; ')+'.';first?.focus();return false}return true;
+}
+function makeWordDocument(){
+  if(!window.docx)throw new Error('docx library unavailable');
+  const {Document,Paragraph,TextRun,Tab,AlignmentType,TabStopType,PageOrientation}=window.docx;
+  const FONT='Arial',BODY=21,SMALL=19,NAME=32,RIGHT=10368,GAP=210;
+  const run=(t,o={})=>new TextRun({text:String(t||''),font:FONT,size:o.size||BODY,bold:!!o.bold,italics:!!o.italics});
+  const rightLine=(l,r,o={})=>new Paragraph({children:[run(l,{bold:!!o.leftBold}),new TextRun({children:[new Tab(),String(r||'')],font:FONT,size:BODY,bold:!!o.rightBold})],tabStops:[{type:TabStopType.RIGHT,position:RIGHT}],spacing:{before:o.before||0,after:o.after||0},keepNext:true,widowControl:true});
+  const heading=t=>new Paragraph({children:[run(String(t).toUpperCase(),{bold:true})],spacing:{before:GAP,after:0},keepNext:true,widowControl:true});
+  const bullet=t=>new Paragraph({children:[run(noPeriod(t))],bullet:{level:0},indent:{left:360,hanging:180},spacing:{after:0},widowControl:true});
+  const line=(runs=[],after=0,keep=false)=>new Paragraph({children:runs,spacing:{after},keepNext:keep,widowControl:true});
+  const children=[];
+  children.push(new Paragraph({children:[run(field('name').toUpperCase(),{bold:true,size:NAME})],alignment:AlignmentType.CENTER,spacing:{after:0},keepNext:true}));
+  const contact=[field('email'),field('phone'),field('linkedin')].filter(Boolean).join(' | ');if(contact)children.push(new Paragraph({children:[run(contact,{size:SMALL})],alignment:AlignmentType.CENTER,spacing:{after:0},keepNext:true}));
+  const addr=[field('streetAddress'),[field('city'),capState(field('state'))].filter(Boolean).join(', ')].filter(Boolean).join(' | ');if(addr)children.push(new Paragraph({children:[run(addr,{size:SMALL})],alignment:AlignmentType.CENTER,spacing:{after:0},keepNext:true}));
+  children.push(heading('Education'));
+  children.push(rightLine([field('school'),field('schoolLocation')].filter(Boolean).join(', '),`Anticipated ${gradLine()}`,{leftBold:true}));
+  children.push(line([run(educationLine())],0,!!(field('minor')||field('certificates')||gpaLine())));
+  if(field('minor'))children.push(bullet(`Minor: ${field('minor')}`));
+  if(field('certificates'))children.push(bullet(`Certificate${field('certificates').includes(';')?'s':''}: ${field('certificates').replace(/;/g,', ')}`));
+  if(gpaLine())children.push(bullet(`GPA: ${gpaLine()}`));
+
+  const groups=getGroups();orderedSections(groups).forEach(section=>{
+    children.push(heading(section));
+    groups[section].forEach((e,idx)=>{
+      const bullets=(e.bullets||[]).map(noPeriod).filter(Boolean);
+      children.push(rightLine(e.title,dateLabel(e),{leftBold:true,before:idx>0?GAP:0}));
+      children.push(line([run([e.org,expLoc(e)].filter(Boolean).join(', '))],0,bullets.length>0));
+      bullets.forEach(b=>children.push(bullet(b)));
+    });
+  });
+  if(field('programmingLanguages')||field('operatingSystems')||field('software')){
+    children.push(heading('Computer Skills'));
+    if(field('programmingLanguages'))children.push(line([run('Languages: ',{bold:true}),run(field('programmingLanguages'))]));
+    if(field('operatingSystems'))children.push(line([run('Operating Systems: ',{bold:true}),run(field('operatingSystems'))]));
+    if(field('software'))children.push(line([run('Software: ',{bold:true}),run(field('software'))]));
+  }
+  if(field('spokenLanguages')){children.push(heading('Languages'));children.push(line([run(field('spokenLanguages'))]));}
+  return new Document({sections:[{properties:{page:{size:{width:12240,height:15840,orientation:PageOrientation.PORTRAIT},margin:{top:936,right:936,bottom:936,left:936,header:360,footer:360,gutter:0}}},children}]});
+}
+function filename(){const n=field('name').replace(/[^A-Za-z0-9\s_-]/g,'').replace(/\s+/g,'_').replace(/_+/g,'_');return `${n||'Resume'}_Resume.docx`}
+$('downloadResume').addEventListener('click',async()=>{save();if(!validate())return;const btn=$('downloadResume');btn.disabled=true;$('downloadStatus').textContent='Creating your Word resume…';try{const blob=await window.docx.Packer.toBlob(makeWordDocument());if(lastDownloadUrl)URL.revokeObjectURL(lastDownloadUrl);lastDownloadUrl=URL.createObjectURL(blob);const fn=filename();const again=$('downloadAgain');again.href=lastDownloadUrl;again.download=fn;again.classList.remove('hidden');const a=document.createElement('a');a.href=lastDownloadUrl;a.download=fn;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();$('downloadStatus').textContent=`Your formatted Word resume is ready: ${fn}`}catch(err){console.error(err);$('downloadStatus').textContent='The Word file could not be created. Refresh the page and try again.'}finally{btn.disabled=false}});
+$('nextPage').addEventListener('click',e=>{save();if(!NEXT_ICON_URL){e.preventDefault();$('downloadStatus').textContent='The next ICON page link has not been added yet.';return}$('nextPage').href=NEXT_ICON_URL;$('nextPage').target='_top'});
+
+function bindFields(){
+  const ids=['name','email','phone','linkedin','streetAddress','city','state','school','schoolLocation','degree','otherDegree','major','gradMonth','gradYear','minor','certificates','gpa','programmingLanguages','operatingSystems','software','spokenLanguages'];
+  ids.forEach(id=>$(id).addEventListener('input',()=>{if(id==='state')$('state').value=capState($('state').value);save();renderPreview()}));
+  $('degree').addEventListener('change',()=>{$('otherDegreeWrap').classList.toggle('hidden',$('degree').value!=='Other');save();renderPreview()});
+}
+fillGrad();load();restore();renderIdeas();renderExperiences();bindFields();renderPreview();
+})();
+</script>
+</body>
+</html>
