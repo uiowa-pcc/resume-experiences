@@ -210,12 +210,12 @@ function savedBulletsFor(exp){
   return bank.filter(item=>{
     if(item.experienceId && String(item.experienceId)===String(exp.id)) return true;
     return !item.experienceId && normalizeTitle(item.experienceTitle) && normalizeTitle(item.experienceTitle)===normalizeTitle(exp.title);
-  }).map(item=>stripBullet(item.text||'')).filter(Boolean);
+  }).map(item=>noPeriod(item.text||'')).filter(Boolean);
 }
 function savedBulletCount(exp){return savedBulletsFor(exp).length}
 function mergeSavedBullets(exp){
   const saved=savedBulletsFor(exp);
-  const current=(exp.bullets||[]).map(stripBullet).filter(Boolean);
+  const current=(exp.bullets||[]).map(noPeriod).filter(Boolean);
   const merged=[...current];
   saved.forEach(b=>{if(!merged.some(x=>x.toLowerCase()===b.toLowerCase()))merged.push(b)});
   exp.bullets=merged.length?merged:[''];
@@ -328,7 +328,7 @@ function renderPreview(){
   const school=$('school').value.trim(),schoolLoc=$('schoolLocation').value.trim(),grad=graduationLine(),degree=educationLine(),minor=$('minor').value.trim(),certificates=$('certificates').value.trim(),gpa=gpaLine();
   if(school||degree){html+=`<div class="r-heading">EDUCATION</div><div class="r-block"><div class="r-row"><span class="r-bold">${escapeHtml([school,schoolLoc].filter(Boolean).join(', '))}</span><span class="right">${escapeHtml(grad)}</span></div>${degree?`<div>${escapeHtml(degree)}</div>`:''}${educationBulletsHtml(minor,certificates,gpa)}</div>`}
   const groups=getGrouped();
-  data.sectionOrder.forEach(s=>{if(!groups[s]?.length)return;html+=`<div class="r-heading">${escapeHtml(s.toUpperCase())}</div>`;groups[s].forEach(e=>{const bullets=(e.bullets||[]).map(x=>x.trim()).filter(Boolean);html+=`<div class="r-block"><div class="r-row"><span class="r-bold">${escapeHtml(e.title||'Experience Title')}</span><span class="right">${escapeHtml(dateLabel(e))}</span></div><div>${escapeHtml([e.org,experienceLocation(e)].filter(Boolean).join(', '))}</div>${bullets.length?`<ul class="r-bullets">${bullets.map(b=>`<li>${escapeHtml(stripBullet(b))}</li>`).join('')}</ul>`:'<div class="empty-preview">Add resume bullets</div>'}</div>`})});
+  data.sectionOrder.forEach(s=>{if(!groups[s]?.length)return;html+=`<div class="r-heading">${escapeHtml(s.toUpperCase())}</div>`;groups[s].forEach(e=>{const bullets=(e.bullets||[]).map(x=>x.trim()).filter(Boolean);html+=`<div class="r-block"><div class="r-row"><span class="r-bold">${escapeHtml(e.title||'Experience Title')}</span><span class="right">${escapeHtml(dateLabel(e))}</span></div><div>${escapeHtml([e.org,experienceLocation(e)].filter(Boolean).join(', '))}</div>${bullets.length?`<ul class="r-bullets">${bullets.map(b=>`<li>${escapeHtml(noPeriod(b))}</li>`).join('')}</ul>`:'<div class="empty-preview">Add resume bullets</div>'}</div>`})});
   const programming=$('programmingLanguages').value.trim(),os=$('operatingSystems').value.trim(),software=$('software').value.trim(),spoken=$('spokenLanguages').value.trim();
   if(programming||os||software){html+=`<div class="r-heading">COMPUTER SKILLS</div><div class="r-block">${programming?`<div><span class="r-bold">Languages:</span> ${escapeHtml(programming)}</div>`:''}${os?`<div><span class="r-bold">Operating Systems:</span> ${escapeHtml(os)}</div>`:''}${software?`<div><span class="r-bold">Software:</span> ${escapeHtml(software)}</div>`:''}</div>`}
   if(spoken){html+=`<div class="r-heading">LANGUAGES</div><div class="r-block">${escapeHtml(spoken)}</div>`}
@@ -409,7 +409,7 @@ function makeWordDocument(){
     if(!groups[section]?.length)return;
     children.push(heading(section));
     groups[section].forEach((e,idx)=>{
-      const bullets=(e.bullets||[]).map(x=>stripBullet(x.trim())).filter(Boolean);
+      const bullets=(e.bullets||[]).map(x=>noPeriod(x.trim())).filter(Boolean);
       children.push(rightLine(e.title||'Experience Title',dateLabel(e),{leftBold:true}));
       const org=[e.org,experienceLocation(e)].filter(Boolean).join(', ');
       if(org)children.push(new Paragraph({children:[run(org)],spacing:{after:0},keepNext:bullets.length>0,widowControl:true}));
@@ -478,7 +478,7 @@ function save(){
   try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(_){}
 }
 function restoreFields(){const f=data.starterFields||{};Object.entries(f).forEach(([k,v])=>{if($(k))$(k).value=v});$('otherDegreeWrap').classList.toggle('hidden',$('degree').value!=='Other')}
-function stripBullet(s=''){return s.replace(/^\s*[•\-*]\s*/,'').trim()}
+function stripBullet(s=''){return s.replace(/^\s*[•\-*]\s*/,'').trim()}function noPeriod(s=''){return stripBullet(s).replace(/\.\s*$/g,'')}
 function escapeHtml(v=''){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function attr(v=''){return escapeHtml(v).replace(/`/g,'&#96;')}
 
